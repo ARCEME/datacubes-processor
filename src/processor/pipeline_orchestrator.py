@@ -1,13 +1,14 @@
 import argparse
-import importlib.util
 import os
 import re
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 import pandas as pd
 import requests
 import xarray as xr
+import yaml
 import zarr
 from dateutil.relativedelta import relativedelta
 from pystac_client.exceptions import APIError
@@ -23,15 +24,11 @@ from utils import (
 )
 
 
-def load_config(config_path: str) -> Dict:
-    spec = importlib.util.spec_from_file_location("pipeline_config", config_path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError(f"Cannot load config from {config_path}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    if not hasattr(module, "PIPELINE_CONFIG"):
-        raise RuntimeError("Config file must define PIPELINE_CONFIG")
-    return module.PIPELINE_CONFIG
+def load_config(config_path: str = None) -> Dict:
+    if config_path is None:
+        config_path = Path(__file__).parent / "pipeline_config.yaml"
+    with open(config_path, 'r') as f:
+        return yaml.safe_load(f)
 
 
 def ensure_dir(path: str) -> None:
@@ -265,16 +262,8 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
         print(f"[MERGE] Saved: {output_path}")
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Data cube pipeline orchestrator")
-    parser.add_argument(
-        "--config",
-        default=os.path.join(os.path.dirname(__file__), "pipeline_config.py"),
-        help="Path to pipeline_config.py",
-    )
-    args = parser.parse_args()
-
-    cfg = load_config(args.config)
+def main(config_path: str = None) -> None:
+    cfg = load_config(config_path)
 
     for key in ["s2", "s2_cloudmask", "s1", "copdem", "esalc", "merged"]:
         ensure_dir(cfg["output_dirs"][key])
@@ -295,8 +284,8 @@ def main() -> None:
 
         start_date, end_date = build_date_range(
             event_date,
-            cfg["increment_months"],
-            cfg["decrement_months"],
+            cfg["temporal"]["increment_months"],
+            cfg["temporal"]["decrement_months"],
         )
 
         create_cube_for_location(
@@ -308,9 +297,9 @@ def main() -> None:
             collections=cfg["collections"]["s2"],
             source=cfg["sources"]["s2"],
             output_dir=cfg["output_dirs"]["s2"],
-            edge_size=cfg["edge_size"],
-            units=cfg["units"],
-            resolution=cfg["resolution"],
+            edge_size=cfg["spatial"]["edge_size"],
+            units=cfg["spatial"]["units"],
+            resolution=cfg["spatial"]["resolution"],
             skip_existing=cfg["skip_existing"],
             processed_locations=processed["s2"],
             s2_filter_contains_bbox=cfg["s2_filter_contains_bbox"],
@@ -325,14 +314,14 @@ def main() -> None:
             collections=cfg["collections"]["s1"],
             source=cfg["sources"]["s1"],
             output_dir=cfg["output_dirs"]["s1"],
-            edge_size=cfg["edge_size"],
-            units=cfg["units"],
-            resolution=cfg["resolution"],
+            edge_size=cfg["spatial"]["edge_size"],
+            units=cfg["spatial"]["units"],
+            resolution=cfg["spatial"]["resolution"],
             skip_existing=cfg["skip_existing"],
             processed_locations=processed["s1"],
         )
 
-        copdem_range = cfg["static_date_ranges"]["copdem"]
+        copdem_range = cfg["static_dates"]["copdem"]
         create_cube_for_location(
             location=location,
             lon=lon,
@@ -342,14 +331,14 @@ def main() -> None:
             collections=cfg["collections"]["copdem"],
             source=cfg["sources"]["copdem"],
             output_dir=cfg["output_dirs"]["copdem"],
-            edge_size=cfg["edge_size"],
-            units=cfg["units"],
-            resolution=cfg["resolution"],
+            edge_size=cfg["spatial"]["edge_size"],
+            units=cfg["spatial"]["units"],
+            resolution=cfg["spatial"]["resolution"],
             skip_existing=cfg["skip_existing"],
             processed_locations=processed["copdem"],
         )
 
-        esalc_range = cfg["static_date_ranges"]["esalc"]
+        esalc_range = cfg["static_dates"]["esalc"]
         create_cube_for_location(
             location=location,
             lon=lon,
@@ -359,9 +348,9 @@ def main() -> None:
             collections=cfg["collections"]["esalc"],
             source=cfg["sources"]["esalc"],
             output_dir=cfg["output_dirs"]["esalc"],
-            edge_size=cfg["edge_size"],
-            units=cfg["units"],
-            resolution=cfg["resolution"],
+            edge_size=cfg["spatial"]["edge_size"],
+            units=cfg["spatial"]["units"],
+            resolution=cfg["spatial"]["resolution"],
             skip_existing=cfg["skip_existing"],
             processed_locations=processed["esalc"],
         )
@@ -380,4 +369,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="ARCEME Data Cube Pipeline")
+    parser.add_argument("--config", type=str, default=None, help="Path to config YAML (default: pipeline_config.yaml)")
+    args = parser.parse_args()
+    
+    main(config_path=args.config)
