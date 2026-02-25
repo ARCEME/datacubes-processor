@@ -1,0 +1,44 @@
+NAME: SEnSeIv2-SegFormerB2-alldata-ambiguous
+
+#-------------
+# Model options
+#-------------
+PATCH_SIZE: 512
+SEnSeIv2: 'hf_models/sensei-configs/senseiv2-medium.yaml'
+MODEL_TYPE: 'Segformer'
+SEGFORMER_CONFIG: 'nvidia/mit-b2'
+RECOVERY_MODULE: false
+CLASSES: 7
+MULTIMODAL: false
+NUM_CHANNELS: null # Set to null for sensor independent models
+
+#----------------
+# Training options (not needed for inference)
+#----------------
+EPOCHS: 105
+BATCH_SIZE: 8
+PHASES: [0, 1, 2, 75, 95, 110]
+ACCUMULATE_STEPS: [1, 1, 1, 1, 1, 1]
+LR: [0.000005, 0.00002, 0.0001, 0.00002, 0.00001, 0.000002]
+EPSILON: 0.000001
+WEIGHT_DECAY: 0.0001
+L1_REG: 0
+RECOVERY_WARMUP_STEPS: 10000
+RECOVERY_LOSS_FACTOR: 1
+LOSS: 'ambiguous_crossentropy_loss'
+
+#-------------
+# Data options
+# Note: L7Irish and L8CCA are very large, so repeat other datasets to make up for it
+# Training epochs will max out at 4000 steps, so repeating datasets beyond that just
+# changes relative frequency of each dataset appearing. 
+#-------------
+TRAIN_DIRS:
+  - 'path/to/be/set1' # Multiple paths to different datasets
+  - 'path/to/be/set2'
+  - 'path/to/be/set3'
+  - 'path/to/be/set4'
+VALID_DIRS:
+  - 'path/to/be/set'
+MIN_BANDS: 3
+MAX_BANDS: 13
