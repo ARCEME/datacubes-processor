@@ -149,3 +149,30 @@ See `requirements.txt` for full list.
 **Cloud mask slow**: Consider setting `cloud_mask.enabled: false` or use `device: cuda` if GPU available
 
 **Memory errors**: Reduce `chunk_time`, `chunk_x`, or `chunk_y` in merge settings
+
+## Project Structure
+
+```
+data-cubes-arceme/
+├── src/processor/
+│   ├── pipeline_orchestrator.py    # Main entry point
+│   ├── pipeline_config.yaml        # Configuration file
+│   ├── cloud_mask.py               # Cloud masking module
+│   ├── utils.py                    # Shared utility functions
+│   └── archive/                    # Old scripts (deprecated)
+├── SEnSeIv2_config/
+│   ├── config.yaml                 # Cloud mask model config
+│   └── weights.pt                  # Cloud mask model weights
+├── data/                           # Input CSV files with locations
+├── test/                           # Test scripts
+└── README.md                       # This file
+```
+
+### Active Files (Use These)
+- `src/processor/pipeline_orchestrator.py` - Run this script
+- `src/processor/pipeline_config.yaml` - Edit this config
+- `src/processor/cloud_mask.py` - Cloud masking (called by orchestrator)
+- `src/processor/utils.py` - Helper functions
+
+### Archive (Do Not Use)
+- `src/processor/archive/*` - Old standalone scripts replaced by orchestrator

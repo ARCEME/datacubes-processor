@@ -5,14 +5,19 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+import numpy as np
 import pandas as pd
 import requests
 import xarray as xr
 import yaml
 import zarr
 from dateutil.relativedelta import relativedelta
+from dotenv import load_dotenv
 from pystac_client.exceptions import APIError
 from shapely.geometry import shape
+
+# Load environment variables from .env file
+load_dotenv(Path(__file__).parent.parent.parent / '.env')
 
 from utils import (
     build_cubedataset_from_items,
@@ -251,8 +256,23 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
                 return None
             return tuple(int(c) for dim in chunks for c in dim)
 
+        # Set optimal _FillValue for all variables
+        UNIVERSAL_NODATA = 32767
+        
         for var in merged.data_vars:
-            encoding[var] = {"compressor": compressor, "chunks": flatten_chunks(merged[var].chunks)}
+            dtype = merged[var].dtype
+            
+            # Determine appropriate fill value based on dtype
+            if np.issubdtype(dtype, np.floating):
+                fill_value = np.nan
+            else:
+                fill_value = UNIVERSAL_NODATA
+            
+            encoding[var] = {
+                "compressor": compressor, 
+                "chunks": flatten_chunks(merged[var].chunks),
+                "_FillValue": fill_value
+            }
 
         for coord in merged.coords:
             if coord not in encoding:
