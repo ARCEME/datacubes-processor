@@ -1,0 +1,11 @@
+Unnamed: 0,dhp_label,dlabel,longitude,latitude,tp_int,date,source,unveg,sparse,teow,biome,start_date,end_date,DisNo.
+2,99349,125933,27.0,6.6,27.307215,2023-10-19,dhp,0.0015432099,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2023-10-19,2023-10-19,99349_dhp
+14,93324,130125,76.6,49.0,15.949822,2023-08-08,dhp,0.0,0.0,8,"Temperate Grasslands, Savannas & Shrublands",2023-08-08,2023-08-08,93324_dhp
+15,93324,130125,71.2,49.6,0.026518425,2023-08-08,d,0.0,0.19675925,8,"Temperate Grasslands, Savannas & Shrublands",2023-08-08,2023-08-08,130125_d
+16,93165,125933,25.9,7.6,22.963203,2023-08-04,dhp,0.0,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2023-08-04,2023-08-04,93165_dhp
+20,92271,125933,29.6,11.1,21.293077,2023-07-25,dhp,0.012345679,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2023-07-25,2023-07-25,92271_dhp
+38,82955,118209,-63.5,-20.1,19.808016,2023-01-29,dhp,0.0,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2023-01-29,2023-01-29,82955_dhp
+40,82863,118209,-65.1,-26.0,16.1631,2023-01-28,dhp,0.0,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2023-01-28,2023-01-28,82863_dhp
+42,81877,118209,-62.2,-23.1,16.95613,2022-12-24,dhp,0.0,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2022-12-24,2022-12-24,81877_dhp
+44,81874,118209,-62.2,-20.0,35.19391,2022-12-24,dhp,0.0,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2022-12-24,2022-12-24,81874_dhp
+46,81701,118209,-60.5,-22.0,11.556996,2022-12-18,dhp,0.0,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",2022-12-18,2022-12-18,81701_dhp
