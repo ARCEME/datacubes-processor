@@ -8,7 +8,13 @@ dependencies = [
     "pandas>=3.0.1",
     "pystac-client>=0.9.0",
     "requests>=2.32.5",
+    "senseiv2",
     "shapely>=2.1.2",
+    "torch>=2.10.0",
+    "torchvision>=0.25.0",
     "xarray>=2026.2.0",
     "zarr<3.0",
 ]
+
+[tool.uv.sources]
+senseiv2 = { git = "https://github.com/aliFrancis/SEnSeIv2.git" }
