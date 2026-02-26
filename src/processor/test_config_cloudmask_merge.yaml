@@ -1,0 +1,88 @@
+# TEST Configuration - Single datacube with cloud masking
+# Output on large disk: /ARCEME-MERGE/
+
+locations_csv: /home/eouser/datacubes/data-cubes-arceme/data/test_single_location.csv
+skip_existing: false
+
+spatial:
+  edge_size: 10000
+  units: m
+  resolution: 10
+
+temporal:
+  increment_months: 3
+  decrement_months: 3
+
+sources:
+  s2: cdse
+  s1: planetary
+  copdem: cdse
+  esalc: planetary
+
+collections:
+  s2:
+    - sentinel-2-l2a
+  s1:
+    - sentinel-1-rtc
+  copdem:
+    - cop-dem-glo-30-dged-cog
+  esalc:
+    - esa-worldcover
+
+static_dates:
+  copdem:
+    start: "2010-01-01"
+    end: "2024-12-31"
+  esalc:
+    start: "2019-01-01"
+    end: "2020-12-31"
+
+output_dirs:
+  s2: /ARCEME-MERGE/TEST_OUTPUT_CLOUD/S2L2A/
+  s2_cloudmask: /ARCEME-MERGE/TEST_OUTPUT_CLOUD/S2L2A_CLOUDMASK/
+  s1: /ARCEME-MERGE/TEST_OUTPUT_CLOUD/S1RTC/
+  copdem: /ARCEME-MERGE/TEST_OUTPUT_CLOUD/COPDEM/
+  esalc: /ARCEME-MERGE/TEST_OUTPUT_CLOUD/ESALC/
+  merged: /ARCEME-MERGE/TEST_OUTPUT_CLOUD/MERGED/
+
+s2_filter_contains_bbox: false
+
+cloud_mask:
+  enabled: true
+  device: cpu
+  stride: 512
+
+merge:
+  enabled: true
+  chunk_time: 25
+  chunk_x: 500
+  chunk_y: 500
+  prefer_latest_aux: true
+
+  vars_to_uint16:
+    - B01
+    - B02
+    - B03
+    - B04
+    - B05
+    - B06
+    - B07
+    - B08
+    - B8A
+    - B09
+    - B11
+    - B12
+    - SCL
+    - cloud_mask
+    - ESA_LC
+
+  attrs:
+    project: "ARCEME - TEST RUN (cloudmask enabled)"
+    pixel_resolution_meters: "10"
+    resampling_method: "nearest neighbor"
+    size_px: "height: 1000 px, width: 1000 px"
+    stac_endpoints: "CDSE: https://stac.dataspace.copernicus.eu/v1/ Planetary Computer: https://planetarycomputer.microsoft.com/api/stac/v1"
+    collections: "CDSE: sentinel-2-l2a, copernicus-dem-30; Planetary Computer: sentinel-1-rtc, esa-worldcover-2020"
+    cloud_mask_description: "0: Unoccluded, 1: Thick cloud, 2: Thin cloud, 3: Shadow"
+    cloud_mask_algorithm: "SEnSeIv2/SegFormerB2"
+    data_cubes_producer: "CloudFerrro S.A."

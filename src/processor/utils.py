@@ -494,22 +494,29 @@ def build_cubedataset_from_items(
 
         # newly added
 
-        if collection == "esa-worldcover":
-            # przypisujemy sztuczny, stały czas
-            fixed_time = np.datetime64("2020-01-01")
-            cube = cube.assign_coords(time=("time", np.full(cube.sizes["time"], np.datetime64("2020-01-01"))))
-            # cube_mosaicked = [cube]
+        static_mosaic_dates = {
+            "esa-worldcover": np.datetime64("2020-01-01"),
+            "cop-dem-glo-30": np.datetime64("2020-01-01"),
+            "cop-dem-glo-30-dged-cog": np.datetime64("2020-01-01"),
+        }
 
-        # old code
-        cube['time'] = cube['time'].dt.floor('D')
+        # For static products force one common date -> guaranteed spatial mosaic
+        if collection in static_mosaic_dates:
+            fixed_time = static_mosaic_dates[collection]
+            cube = cube.assign_coords(time=("time", np.full(cube.sizes["time"], fixed_time)))
+
+        # Always mosaic items from the same day into a single image
+        cube = cube.assign_coords(time=cube["time"].dt.floor("D"))
         cube_mosaicked = []
-        for date, group in cube.groupby('time'):
-            if group.sizes['time'] > 1:
-                mosaic = stackstac.mosaic(group, dim='time', nodata=np.nan)
-                mosaic = mosaic.expand_dims(time=[date])
-                cube_mosaicked.append(mosaic)
-            else:
-                cube_mosaicked.append(group)
+        for date, group in cube.groupby("time", squeeze=False):
+            mosaic = stackstac.mosaic(group, dim="time", nodata=np.nan)
+
+            # Ensure exactly one time slice per date after mosaicking
+            if "time" in mosaic.dims:
+                mosaic = mosaic.isel(time=0, drop=True)
+
+            mosaic = mosaic.expand_dims(time=[np.datetime64(date)])
+            cube_mosaicked.append(mosaic)
 
         # newly added - drop 'id' variable if exists to avoid conflicts during concatenation
         # cube_mosaicked = [g.drop_vars('id', errors='ignore') for g in cube_mosaicked]
@@ -535,7 +542,8 @@ def build_cubedataset_from_items(
                 cube_mosaicked[i] = cube_mosaicked[i].drop_vars(drop_coords, errors='ignore')
 
 
-        cube = xr.concat(cube_mosaicked, dim='time')
+        cube = xr.concat(cube_mosaicked, dim='time').sortby('time')
+        cube = cube.drop_duplicates(dim='time')
         # end newly added
 
         for attr in ["spec", "crs", "transform", "resolution"]:

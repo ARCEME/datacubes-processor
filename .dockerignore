@@ -1,0 +1,28 @@
+# VCS
+.git
+.gitignore
+
+# Local env / virtual env
+.env
+.venv
+.python-version
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Test/output artifacts
+*.zarr
+TEST_OUTPUT/
+
+# Local notebooks and temporary files
+*.ipynb_checkpoints/
+*.tmp
+*.log
