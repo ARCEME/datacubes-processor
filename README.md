@@ -159,11 +159,12 @@ uv run <command>
 Create a `.env` file in the project root (`data-cubes-arceme/.env`) with your S3 credentials.
 Use this full template (copy/paste into `.env`, do not commit real credentials):
 ```bash
-# Choose ONE endpoint:
+# Choose ONE endpoint (uncomment the right one):
 # CREODIAS users:
-# If you are NOT a CREODIAS user, use CDSE endpoint instead:
-# AWS_S3_ENDPOINT=eodata.dataspace.copernicus.eu
 AWS_S3_ENDPOINT=eodata.cloudferro.com
+# CDSE users:
+AWS_S3_ENDPOINT=eodata.dataspace.copernicus.eu
+
 AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY=YOUR_SECRET_ACCESS_KEY
 AWS_HTTPS=YES
