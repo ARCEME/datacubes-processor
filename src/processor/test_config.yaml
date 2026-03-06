@@ -45,14 +45,8 @@ static_dates:
     start: "2019-01-01"
     end: "2020-12-31"
 
-# TEST OUTPUT directories (on larger disk vdd - 2TB)
-output_dirs:
-  s2: /ARCEMECUBES/TEST_OUTPUT/S2L2A/
-  s2_cloudmask: /ARCEMECUBES/TEST_OUTPUT/S2L2A_CLOUDMASK/
-  s1: /ARCEMECUBES/TEST_OUTPUT/S1RTC/
-  copdem: /ARCEMECUBES/TEST_OUTPUT/COPDEM/
-  esalc: /ARCEMECUBES/TEST_OUTPUT/ESALC/
-  merged: /ARCEMECUBES/TEST_OUTPUT/MERGED/
+# TEST output base directory (subfolders are auto-created)
+output_base_dir: /ARCEMECUBES/TEST_OUTPUT/
 
 # Filter S2 items to those fully containing the AOI
 s2_filter_contains_bbox: false

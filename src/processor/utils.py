@@ -279,12 +279,26 @@ def search_stac_items(
     client = get_stac_client(source)
     client.add_conforms_to("ITEM_SEARCH")
 
+    source_lower = source.lower()
+    collections_lower = [c.lower() for c in collections]
+
+    # CDSE sentinel-2-l2a has strict limit validation.
+    # Without fields extension, keep limit <= 100 to avoid API rejection.
+    effective_limit = limit
+    if source_lower in {"dataspace", "copernicus", "cdse"} and "sentinel-2-l2a" in collections_lower:
+        if effective_limit > 100:
+            effective_limit = 100
+            if verbose:
+                print(
+                    f"Adjusted STAC limit for sentinel-2-l2a on CDSE: {limit} -> {effective_limit}"
+                )
+
     # Wyszukiwanie
     search = client.search(
         intersects=bbox_latlon,
         datetime=f"{start_date}/{end_date}",
         collections=collections,
-        limit=limit,
+        limit=effective_limit,
         query=query,
     )
     # print(search)

@@ -1,8 +1,9 @@
-# TEST Configuration - Single datacube with cloud masking
-# Output on large disk: /ARCEME-MERGE/
+# New locations test run (WOCAT + DHP)
+# Input:  /home/eouser/datacubes/data-cubes-arceme/data/selection_eu_wocat_dhp_qdoy.csv
+# Output: /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/
 
-locations_csv: /home/eouser/datacubes/data-cubes-arceme/data/test_single_location.csv
-skip_existing: false
+locations_csv: /home/eouser/datacubes/data-cubes-arceme/data/selection_eu_wocat_dhp_qdoy.csv
+skip_existing: true
 
 spatial:
   edge_size: 10000
@@ -37,7 +38,8 @@ static_dates:
     start: "2019-01-01"
     end: "2020-12-31"
 
-output_base_dir: /ARCEME-MERGE/TEST_OUTPUT_CLOUD
+# Single base output directory (stage subfolders auto-created)
+output_base_dir: /ARCEME-MERGE/NEW_LOCATIONS_MELANIE
 
 s2_filter_contains_bbox: false
 
@@ -71,7 +73,7 @@ merge:
     - ESA_LC
 
   attrs:
-    project: "ARCEME - TEST RUN (cloudmask enabled)"
+    project: "ARCEME - NEW_LOCATIONS_MELANIE test"
     pixel_resolution_meters: "10"
     resampling_method: "nearest neighbor"
     size_px: "height: 1000 px, width: 1000 px"

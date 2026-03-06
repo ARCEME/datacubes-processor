@@ -45,14 +45,18 @@ static_dates:
     start: "2019-01-01"
     end: "2020-12-31"
 
-# Output directories for each processing stage
-output_dirs:
-  s2: /ARCEMECUBES/NEW-CUBES-MELANIE/S2L2A/
-  s2_cloudmask: /ARCEME-MERGE/S2L2A_CLOUDMASK/
-  s1: /ARCEMECUBES/NEW-CUBES-MELANIE/S1RTC/
-  copdem: /ARCEMECUBES/NEW-CUBES-MELANIE/COPDEM/
-  esalc: /ARCEMECUBES/NEW-CUBES-MELANIE/ESALC/
-  merged: /ARCEME-MERGE/
+# Single base directory for all working/output folders
+# The pipeline automatically creates subfolders inside this path.
+output_base_dir: /ARCEME-MERGE/ARCEME-PIPELINE
+
+# Optional: customize folder names inside output_base_dir
+# output_subdirs:
+#   s2: S2L2A
+#   s2_cloudmask: S2L2A_CLOUDMASK
+#   s1: S1RTC
+#   copdem: COPDEM
+#   esalc: ESALC
+#   merged: MERGED
 
 # Filter S2 items to those fully containing the AOI (slower but more precise)
 s2_filter_contains_bbox: false

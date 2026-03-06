@@ -36,6 +36,46 @@ def load_config(config_path: str = None) -> Dict:
         return yaml.safe_load(f)
 
 
+DEFAULT_OUTPUT_SUBDIRS = {
+    "s2": "S2L2A",
+    "s2_cloudmask": "S2L2A_CLOUDMASK",
+    "s1": "S1RTC",
+    "copdem": "COPDEM",
+    "esalc": "ESALC",
+    "merged": "MERGED",
+}
+
+
+def resolve_output_dirs(cfg: Dict) -> Dict:
+    base_output_dir = cfg.get("output_base_dir")
+    explicit_output_dirs = cfg.get("output_dirs", {}) or {}
+
+    if base_output_dir:
+        output_subdirs = DEFAULT_OUTPUT_SUBDIRS.copy()
+        output_subdirs.update(cfg.get("output_subdirs", {}) or {})
+
+        derived_output_dirs = {
+            key: os.path.join(base_output_dir, output_subdirs[key])
+            for key in DEFAULT_OUTPUT_SUBDIRS
+        }
+
+        # Allow per-stage override if needed
+        derived_output_dirs.update(explicit_output_dirs)
+        cfg["output_dirs"] = derived_output_dirs
+    else:
+        cfg["output_dirs"] = explicit_output_dirs
+
+    missing = [key for key in DEFAULT_OUTPUT_SUBDIRS if key not in cfg["output_dirs"]]
+    if missing:
+        raise ValueError(
+            "Missing output directories for keys: "
+            + ", ".join(missing)
+            + ". Define output_base_dir (preferred) or full output_dirs."
+        )
+
+    return cfg
+
+
 def ensure_dir(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
@@ -284,8 +324,9 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
 
 def main(config_path: str = None) -> None:
     cfg = load_config(config_path)
+    cfg = resolve_output_dirs(cfg)
 
-    for key in ["s2", "s2_cloudmask", "s1", "copdem", "esalc", "merged"]:
+    for key in DEFAULT_OUTPUT_SUBDIRS:
         ensure_dir(cfg["output_dirs"][key])
 
     table = pd.read_csv(cfg["locations_csv"])
