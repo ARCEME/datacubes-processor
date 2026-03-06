@@ -154,6 +154,39 @@ Run any command in the project environment with:
 uv run <command>
 ```
 
+## Environment Variables (`.env`)
+
+Create a `.env` file in the project root (`data-cubes-arceme/.env`) with your S3 credentials.
+Use this full template (copy/paste into `.env`, do not commit real credentials):
+```bash
+# Choose ONE endpoint:
+# CREODIAS users:
+# If you are NOT a CREODIAS user, use CDSE endpoint instead:
+# AWS_S3_ENDPOINT=eodata.dataspace.copernicus.eu
+AWS_S3_ENDPOINT=eodata.cloudferro.com
+AWS_ACCESS_KEY_ID=YOUR_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY=YOUR_SECRET_ACCESS_KEY
+AWS_HTTPS=YES
+AWS_VIRTUAL_HOSTING=FALSE
+GDAL_HTTP_TCP_KEEPALIVE=YES
+GDAL_HTTP_UNSAFESSL=YES
+GDAL_HTTP_MAX_RETRY=5
+GDAL_HTTP_RETRY_DELAY=30
+GDAL_HTTP_MAX_CONNECTIONS=2
+CPL_VSIL_CURL_CACHE_SIZE=10000000000
+CPL_VSIL_CURL_CHUNK_SIZE=67108864
+CPL_VSIL_CURL_USE_HEAD=NO
+GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR
+```
+
+Endpoint choice:
+- If you are a CREODIAS user, use `odata.cloudferro.com`.
+- Otherwise, use CDSE endpoint `eodata.dataspace.copernicus.eu`.
+
+For CDSE, generate S3 credentials first:
+- Tutorial: https://documentation.dataspace.copernicus.eu/APIs/S3.html
+- Credentials panel: https://eodata-s3keysmanager.dataspace.copernicus.eu/panel/s3-credentials
+
 ## Troubleshooting
 
 **"Config file not found"**: Make sure `pipeline_config.yaml` exists in the same directory as `pipeline_orchestrator.py`
