@@ -2,27 +2,36 @@
 
 ## Overview
 
-The pipeline orchestrator creates multi-source satellite datacubes for ARCEME project locations. It processes:
+The pipeline orchestrator creates multi-source satellite datacubes for ARCEME project locations. It processes following datasets:
 - **Sentinel-2 L2A** (CDSE or Planetary Computer)
 - **Sentinel-1 RTC** (Planetary Computer)
 - **Copernicus DEM** (CDSE)
 - **ESA WorldCover** (Planetary Computer)
-- **Cloud Mask** (optional, using SEnSeIv2 model)
-- **Merged datacubes** with all sources combined
 
 ## Quick Start
 
-1. **Edit configuration**: Open `pipeline_config.yaml` and adjust paths, dates, and settings
-
-2. **Run pipeline**:
+1. **Install `uv`** (if not installed):
 ```bash
-cd /home/eouser/datacubes/data-cubes-arceme/src/processor
-python pipeline_orchestrator.py
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source "$HOME/.local/bin/env"  # or restart your shell
 ```
 
-3. **Use custom config** (optional):
+2. **Sync dependencies from project root**:
 ```bash
-python pipeline_orchestrator.py --config /path/to/custom_config.yaml
+cd /home/eouser/datacubes/data-cubes-arceme
+uv sync
+```
+
+3. **Edit configuration**: Open `src/processor/pipeline_config.yaml` and adjust paths, dates, and settings
+
+4. **Run pipeline**:
+```bash
+uv run python src/processor/pipeline_orchestrator.py
+```
+
+5. **Use custom config** (optional):
+```bash
+uv run python src/processor/pipeline_orchestrator.py --config /path/to/custom_config.yaml
 ```
 
 ## Configuration File
@@ -55,19 +64,19 @@ sources:
   copdem: cdse     # DEM from CDSE
   esalc: planetary # Land cover from Planetary Computer
 
-# Enable cloud masking (adds ~30 min per location)
+# Enable cloud masking (adds ~30 min per location depends on batch size and CPU/GPU)
 cloud_mask:
   enabled: true
   device: cpu      # or 'cuda' if GPU available
 
 # Output directories for each stage
 output_dirs:
-  s2: /ARCEMECUBES/NEW-CUBES-MELANIE/S2L2A/
-  s2_cloudmask: /ARCEME-MERGE/S2L2A_CLOUDMASK/
-  s1: /ARCEMECUBES/NEW-CUBES-MELANIE/S1RTC/
-  copdem: /ARCEMECUBES/NEW-CUBES-MELANIE/COPDEM/
-  esalc: /ARCEMECUBES/NEW-CUBES-MELANIE/ESALC/
-  merged: /ARCEME-MERGE/
+  s2: /ARCEMECUBES/S2L2A/
+  s2_cloudmask: /ARCEMECUBES/S2L2A_CLOUDMASK/
+  s1: /ARCEMECUBES/S1RTC/
+  copdem: /ARCEMECUBES/COPDEM/
+  esalc: /ARCEMECUBES/ESALC/
+  merged: /ARCEMECUBES/
 ```
 
 ### Static Layers
@@ -100,13 +109,11 @@ merge:
 
 ## Pipeline Workflow
 
-For each location in the CSV:
-
 1. **Sentinel-2 L2A**: Creates cube from event_date ± temporal window
-2. **Cloud Mask** (if enabled): Applies SEnSeIv2 model to S2 cube
+2. **Cloud Mask** (if enabled): Applies SEnSeIv2 model to S2 cube (there is possible to select different weights and -parameters in SEnSeIv2_config yaml)
 3. **Sentinel-1 RTC**: Creates cube with same temporal window
-4. **Copernicus DEM**: Creates cube with static date range
-5. **ESA WorldCover**: Creates cube for 2020
+4. **Copernicus DEM**: Creates cube with digital elevation model
+5. **ESA WorldCover**: Creates cube with land cover
 6. **Merge** (if enabled): Combines all sources, rechunks, adds metadata
 
 ## Output Format
@@ -130,13 +137,22 @@ When `skip_existing: true`, the pipeline checks each output directory and skips 
 
 ## Dependencies
 
-Requires:
-- `pyyaml` (for config loading)
-- `xarray`, `zarr`, `pandas`
-- `rasterio`, `stackstac`, `pystac-client`
-- `senseiv2` (for cloud masking)
+Dependencies are managed with `uv`.
+All project dependencies are defined in `pyproject.toml` (with lockfile in `uv.lock`).
+The `senseiv2` dependency is pulled from Git via `[tool.uv.sources]`.
 
-See `requirements.txt` for full list.
+Install `uv` from:
+https://astral.sh/uv/install.sh
+
+Initialize environment and install dependencies:
+```bash
+uv sync
+```
+
+Run any command in the project environment with:
+```bash
+uv run <command>
+```
 
 ## Troubleshooting
 
