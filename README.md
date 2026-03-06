@@ -69,14 +69,17 @@ cloud_mask:
   enabled: true
   device: cpu      # or 'cuda' if GPU available
 
-# Output directories for each stage
-output_dirs:
-  s2: /ARCEMECUBES/S2L2A/
-  s2_cloudmask: /ARCEMECUBES/S2L2A_CLOUDMASK/
-  s1: /ARCEMECUBES/S1RTC/
-  copdem: /ARCEMECUBES/COPDEM/
-  esalc: /ARCEMECUBES/ESALC/
-  merged: /ARCEMECUBES/
+# One base path for all outputs (recommended)
+output_base_dir: /ARCEMECUBES/MY_RUN
+
+# Optional custom names for stage folders inside output_base_dir
+# output_subdirs:
+#   s2: S2L2A
+#   s2_cloudmask: S2L2A_CLOUDMASK
+#   s1: S1RTC
+#   copdem: COPDEM
+#   esalc: ESALC
+#   merged: MERGED
 ```
 
 ### Static Layers
