@@ -19,6 +19,10 @@ def robust_percentile_stretch(arr: np.ndarray, pmin: int = 2, pmax: int = 98) ->
     return np.clip(out, 0.0, 1.0).astype(np.float32)
 
 
+def normalize_filename_part(value: str) -> str:
+    return value.replace(":", "-").replace("/", "_").replace(" ", "_")
+
+
 def get_time_dim(da: xr.DataArray) -> str | None:
     for dim in da.dims:
         if dim.lower().startswith("time"):
@@ -26,87 +30,111 @@ def get_time_dim(da: xr.DataArray) -> str | None:
     return None
 
 
-def pick_best_time_index(ds: xr.Dataset) -> int:
-    if "cloud_mask" not in ds:
-        return 0
+def is_categorical_band(var_name: str, arr: np.ndarray) -> bool:
+    if var_name in {"SCL", "cloud_mask", "ESA_LC"}:
+        return True
 
-    cm = ds["cloud_mask"]
-    time_dim = get_time_dim(cm)
-    if time_dim is None:
-        return 0
+    valid = arr[np.isfinite(arr)]
+    if valid.size == 0:
+        return False
 
-    data = cm.values
-    if data.ndim != 3:
-        return 0
-
-    best_idx = 0
-    best_score = -1.0
-    for idx in range(data.shape[0]):
-        mask = data[idx]
-        valid = np.isfinite(mask) & (mask <= 3)
-        valid_count = int(valid.sum())
-        if valid_count == 0:
-            score = -1.0
-        else:
-            clear_count = int((mask == 0).sum())
-            score = clear_count / valid_count
-
-        if score > best_score:
-            best_score = score
-            best_idx = idx
-
-    return best_idx
+    unique_count = np.unique(valid).size
+    return unique_count <= 30
 
 
-def build_rgb_preview(ds: xr.Dataset) -> np.ndarray:
-    for band in ["B04", "B03", "B02"]:
-        if band not in ds:
-            raise ValueError(f"Missing required band '{band}' in merged cube")
-
-    idx = pick_best_time_index(ds)
-
-    r_da = ds["B04"]
-    g_da = ds["B03"]
-    b_da = ds["B02"]
-
-    time_dim = get_time_dim(r_da)
-    if time_dim is not None:
-        r = r_da.isel({time_dim: idx}).values.astype(np.float32)
-        g = g_da.isel({time_dim: idx}).values.astype(np.float32)
-        b = b_da.isel({time_dim: idx}).values.astype(np.float32)
-    else:
-        r = r_da.values.astype(np.float32)
-        g = g_da.values.astype(np.float32)
-        b = b_da.values.astype(np.float32)
-
-    rgb = np.dstack(
-        [
-            robust_percentile_stretch(r),
-            robust_percentile_stretch(g),
-            robust_percentile_stretch(b),
-        ]
-    )
-    return rgb
+def save_band_slice(
+    image: np.ndarray,
+    out_path: Path,
+    title: str,
+    cmap: str,
+    categorical: bool,
+) -> None:
+    _ = title
+    _ = categorical
+    plt.imsave(out_path, image, cmap=cmap)
 
 
-def save_jpg(zarr_path: Path, output_dir: Path) -> None:
+def save_all_visualizations_for_zarr(zarr_path: Path, output_dir: Path) -> tuple[int, int]:
     ds = xr.open_zarr(zarr_path, consolidated=True)
-    rgb = build_rgb_preview(ds)
+    zarr_out_dir = output_dir / zarr_path.stem
+    zarr_out_dir.mkdir(parents=True, exist_ok=True)
 
-    out_path = output_dir / f"{zarr_path.stem}.jpg"
-    plt.figure(figsize=(8, 8))
-    plt.imshow(rgb)
-    plt.title(zarr_path.stem)
-    plt.axis("off")
-    plt.tight_layout()
-    plt.savefig(out_path, dpi=150, bbox_inches="tight")
-    plt.close()
+    saved = 0
+    failed = 0
 
-    print(f"Saved: {out_path}")
+    for var_name in sorted(ds.data_vars):
+        da = ds[var_name]
+        time_dim = get_time_dim(da)
+        var_dir = zarr_out_dir / var_name
+        var_dir.mkdir(parents=True, exist_ok=True)
+
+        if time_dim is None:
+            arr = da.values.astype(np.float32)
+            if arr.ndim != 2:
+                print(f"Skip {zarr_path.stem}/{var_name}: expected 2D without time, got shape {arr.shape}")
+                continue
+
+            categorical = is_categorical_band(var_name, arr)
+            cmap = "tab20" if categorical else "viridis"
+            out_path = var_dir / f"{var_name}__single.jpg"
+
+            try:
+                render_arr = arr if categorical else robust_percentile_stretch(arr)
+                save_band_slice(
+                    render_arr,
+                    out_path,
+                    f"{zarr_path.stem}\n{var_name} (single)",
+                    cmap,
+                    categorical,
+                )
+                saved += 1
+            except Exception as exc:
+                failed += 1
+                print(f"Failed: {out_path.name} -> {exc}")
+            continue
+
+        time_size = int(da.sizes[time_dim])
+        for idx in range(time_size):
+            try:
+                sliced = da.isel({time_dim: idx}).values.astype(np.float32)
+                if sliced.ndim != 2:
+                    print(
+                        f"Skip {zarr_path.stem}/{var_name}[{idx}]: "
+                        f"expected 2D after time slice, got shape {sliced.shape}"
+                    )
+                    continue
+
+                categorical = is_categorical_band(var_name, sliced)
+                cmap = "tab20" if categorical else "viridis"
+
+                if time_dim in da.coords:
+                    time_value = str(da.coords[time_dim].values[idx])
+                else:
+                    time_value = f"idx{idx:04d}"
+                time_value_clean = normalize_filename_part(time_value)
+
+                out_path = var_dir / f"{var_name}__{idx:04d}__{time_value_clean}.jpg"
+                render_arr = sliced if categorical else robust_percentile_stretch(sliced)
+
+                save_band_slice(
+                    render_arr,
+                    out_path,
+                    f"{zarr_path.stem}\n{var_name} | {time_value}",
+                    cmap,
+                    categorical,
+                )
+                saved += 1
+            except Exception as exc:
+                failed += 1
+                print(f"Failed: {zarr_path.stem}/{var_name}[{idx}] -> {exc}")
+
+    return saved, failed
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Render JPG previews for all merged Zarr cubes")
+    parser = argparse.ArgumentParser(
+        description="Render all-band and all-date JPG visualizations for merged Zarr cubes"
+    )
     parser.add_argument(
         "--merged-dir",
         default="/ARCEME-MERGE/NEW_LOCATIONS_MELANIE/MERGED",
@@ -115,7 +143,7 @@ def main() -> None:
     parser.add_argument(
         "--jpg-dir",
         default="/ARCEME-MERGE/NEW_LOCATIONS_MELANIE/JPG",
-        help="Output directory for JPG previews",
+        help="Output root directory for JPG previews (one subfolder per zarr)",
     )
     args = parser.parse_args()
 
@@ -129,18 +157,21 @@ def main() -> None:
         return
 
     print(f"Found {len(zarr_paths)} merged cubes")
-    ok = 0
-    failed = 0
+    total_saved = 0
+    total_failed = 0
 
     for zarr_path in zarr_paths:
         try:
-            save_jpg(zarr_path, jpg_dir)
-            ok += 1
+            print(f"Processing: {zarr_path.name}")
+            saved, failed = save_all_visualizations_for_zarr(zarr_path, jpg_dir)
+            total_saved += saved
+            total_failed += failed
+            print(f"Completed: {zarr_path.name} | saved={saved} failed={failed}")
         except Exception as exc:
-            failed += 1
-            print(f"Failed: {zarr_path.name} -> {exc}")
+            total_failed += 1
+            print(f"Failed zarr: {zarr_path.name} -> {exc}")
 
-    print(f"Done. Success: {ok}, Failed: {failed}")
+    print(f"Done. Saved JPGs: {total_saved}, Failed renders: {total_failed}")
 
 
 if __name__ == "__main__":
