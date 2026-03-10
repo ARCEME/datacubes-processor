@@ -83,6 +83,59 @@ done
 tail -n 80 /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/run_manual.log
 ```
 
+## Docker Run
+
+You can run the same full workflow in Docker without changing Python code.
+
+### Build image
+
+```bash
+cd /home/eouser/datacubes/data-cubes-arceme
+docker build -t arceme-pipeline:latest .
+```
+
+If you get `permission denied` on `/var/run/docker.sock`, use `sudo`:
+
+```bash
+sudo docker build -t arceme-pipeline:latest .
+```
+
+### Run with your YAML config
+
+```bash
+docker run --rm -it \
+  --env-file /home/eouser/datacubes/data-cubes-arceme/.env \
+  -e PIPELINE_CONFIG=src/processor/new_locations_test_config.yaml \
+  -v /ARCEME-MERGE:/ARCEME-MERGE \
+  arceme-pipeline:latest
+```
+
+`PIPELINE_CONFIG` is read by the Docker container and passed to `pipeline_orchestrator.py --config`.
+
+### Run in tmux (recommended for long jobs)
+
+```bash
+tmux new -s arceme_docker
+cd /home/eouser/datacubes/data-cubes-arceme
+docker run --rm -it \
+  --env-file /home/eouser/datacubes/data-cubes-arceme/.env \
+  -e PIPELINE_CONFIG=src/processor/new_locations_test_config.yaml \
+  -v /ARCEME-MERGE:/ARCEME-MERGE \
+  arceme-pipeline:latest |& tee /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/run_docker.log
+```
+
+### Monitor output
+
+```bash
+for d in S2L2A S2L2A_CLOUDMASK S1RTC COPDEM ESALC MERGED; do
+  echo "$d $(find /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/$d -mindepth 1 -maxdepth 1 -type d | wc -l)"
+done
+```
+
+```bash
+tail -n 80 /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/run_docker.log
+```
+
 ## Configuration File
 
 The `pipeline_config.yaml` contains all pipeline settings:
