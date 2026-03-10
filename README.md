@@ -34,6 +34,55 @@ uv run python src/processor/pipeline_orchestrator.py
 uv run python src/processor/pipeline_orchestrator.py --config /path/to/custom_config.yaml
 ```
 
+## Run Full Workflow Yourself (from your YAML)
+
+If you already fixed your YAML (for example `src/processor/new_locations_test_config.yaml`), run the full pipeline with:
+
+```bash
+cd /home/eouser/datacubes/data-cubes-arceme
+uv sync
+uv run python src/processor/pipeline_orchestrator.py --config src/processor/new_locations_test_config.yaml
+```
+
+This command runs all enabled stages from config:
+1. S2
+2. S1
+3. COPDEM
+4. ESALC
+5. Cloud mask (if `cloud_mask.enabled: true`)
+6. Merge (if `merge.enabled: true`)
+
+### Recommended: run in tmux
+
+For long runs, start in `tmux` so it keeps running after disconnect:
+
+```bash
+tmux new -s arceme_workflow
+cd /home/eouser/datacubes/data-cubes-arceme
+uv run python src/processor/pipeline_orchestrator.py --config src/processor/new_locations_test_config.yaml |& tee /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/run_manual.log
+```
+
+Useful tmux commands:
+```bash
+# detach from session
+Ctrl+b then d
+
+# return to session
+tmux attach -t arceme_workflow
+```
+
+### Check progress while running
+
+```bash
+for d in S2L2A S2L2A_CLOUDMASK S1RTC COPDEM ESALC MERGED; do
+  echo "$d $(find /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/$d -mindepth 1 -maxdepth 1 -type d | wc -l)"
+done
+```
+
+```bash
+tail -n 80 /ARCEME-MERGE/NEW_LOCATIONS_MELANIE/run_manual.log
+```
+
 ## Configuration File
 
 The `pipeline_config.yaml` contains all pipeline settings:
