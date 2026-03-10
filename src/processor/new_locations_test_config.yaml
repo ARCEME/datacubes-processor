@@ -11,8 +11,8 @@ spatial:
   resolution: 10
 
 temporal:
-  increment_months: 3
-  decrement_months: 3
+  increment_months: 12
+  decrement_months: 12
 
 sources:
   s2: cdse
