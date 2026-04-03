@@ -519,8 +519,20 @@ def build_cubedataset_from_items(
             fixed_time = static_mosaic_dates[collection]
             cube = cube.assign_coords(time=("time", np.full(cube.sizes["time"], fixed_time)))
 
-        # Always mosaic items from the same day into a single image
-        cube = cube.assign_coords(time=cube["time"].dt.floor("D"))
+        # S1 collections: keep minute-precision time to distinguish ascending/descending passes
+        is_s1 = collection in ('sentinel-1-rtc', 'sentinel-1-grd')
+        orbit_state_map = {}
+
+        if is_s1:
+            # Extract orbit state from STAC metadata before coordinates are dropped
+            if 'sat:orbit_state' in cube.coords:
+                for i in range(cube.sizes['time']):
+                    t_key = pd.Timestamp(cube.time.values[i]).floor('min')
+                    orbit_state_map[t_key] = str(cube.coords['sat:orbit_state'].values[i])
+            cube = cube.assign_coords(time=cube["time"].dt.floor("min"))
+        else:
+            # Mosaic items from the same day into a single image
+            cube = cube.assign_coords(time=cube["time"].dt.floor("D"))
         cube_mosaicked = []
         for date, group in cube.groupby("time", squeeze=False):
             mosaic = stackstac.mosaic(group, dim="time", nodata=np.nan)
@@ -582,12 +594,23 @@ def build_cubedataset_from_items(
         time_dim = f"time_{collection.replace('-', '_')}"
         ds = ds.rename({"time": time_dim})
 
+        # Add orbit_state coordinate for S1 data
+        if is_s1 and orbit_state_map:
+            orbit_states = [
+                orbit_state_map.get(pd.Timestamp(t), 'unknown')
+                for t in ds[time_dim].values
+            ]
+            ds = ds.assign_coords(orbit_state=(time_dim, orbit_states))
+
         # Drop problematic coordinates if they exist
         ds = ds.drop_vars(problematic_coords, errors='ignore')
 
         # Keep only the bands of interest and coordinates
+        keep_vars = bands + [time_dim, 'x', 'y']
+        if is_s1 and 'orbit_state' in ds.coords:
+            keep_vars.append('orbit_state')
         ds = ds.drop_vars(
-            [v for v in ds.variables if v not in bands + [time_dim, 'x', 'y']],
+            [v for v in ds.variables if v not in keep_vars],
             errors='ignore'
         )
 
