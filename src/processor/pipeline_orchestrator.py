@@ -316,7 +316,22 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
 
         for coord in merged.coords:
             if coord not in encoding:
-                encoding[coord] = {"compressor": None, "chunks": flatten_chunks(merged[coord].chunks)}
+                coord_encoding = {
+                    "compressor": None,
+                    "chunks": flatten_chunks(merged[coord].chunks),
+                }
+
+                # Keep S1 acquisition time precision in whole seconds for easier delta analysis.
+                if coord == "time_sentinel_1_rtc" and np.issubdtype(merged[coord].dtype, np.datetime64):
+                    coord_encoding.update(
+                        {
+                            "dtype": "int64",
+                            "units": "seconds since 1970-01-01 00:00:00",
+                            "calendar": "proleptic_gregorian",
+                        }
+                    )
+
+                encoding[coord] = coord_encoding
 
         merged.to_zarr(output_path, mode="w", encoding=encoding, consolidated=True)
         print(f"[MERGE] Saved: {output_path}")
