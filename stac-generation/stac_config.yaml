@@ -1,0 +1,83 @@
+# ============================================================
+# STAC generation config for ARCEME data cubes
+# Used by: generate_stac.py
+# ============================================================
+
+# ---- Collection identity ----
+collection_id: arceme-datacubes
+
+collection_title: "ARCEME Data Cubes – Adaptation and Resilience to Climate Extremes and Multi-hazard Events"
+
+collection_description: >
+  Multi-sensor Earth observation data cubes generated within the ARCEME project
+  (Adaptation and Resilience to Climate Extremes and Multi-hazard Events).
+  Each data cube covers a 10 × 10 km area centred on an extreme weather event
+  site from the WOCAT / DHP database. Cubes integrate four satellite sources:
+
+    • Sentinel-2 L2A – 13 multispectral bands + SCL scene classification
+      (10 m / 20 m / 60 m, resampled to 10 m)
+    • Sentinel-1 RTC – VV and VH SAR backscatter (10 m)
+    • Copernicus DEM GLO-30 – digital elevation model (30 m, resampled to 10 m)
+    • ESA WorldCover 2020 – land-cover map at 10 m
+
+  The temporal window spans 12 months before and after the recorded event date.
+  Pixel resolution is 10 m; tile size is 1000 × 1000 pixels (10 × 10 km).
+  Cloud masking is applied to Sentinel-2 data using the SEnSeIv2/SegFormerB2 model.
+
+license: "proprietary"
+
+# ---- S3 source bucket ----
+s3_bucket: "ARCEME-DC-TEST"
+
+# Optional sub-folder inside the bucket (leave empty string if files are at root)
+s3_prefix: ""
+
+# S3 credentials / endpoint.
+# Leave as {} to use IAM role / environment variables (AWS_ACCESS_KEY_ID, etc.).
+# For CloudFerro / CREODIAS object storage, set endpoint_url.
+#
+# Example for CloudFerro:
+#   s3_kwargs:
+#     key: YOUR_ACCESS_KEY
+#     secret: YOUR_SECRET_KEY
+#     endpoint_url: "https://s3.waw3-1.cloudferro.com"
+#     client_kwargs:
+#       region_name: "waw3-1"
+#
+# Example for standard AWS (credentials from environment / ~/.aws):
+#   s3_kwargs: {}
+s3_kwargs: {}
+
+# ---- Collection-level metadata ----
+keywords:
+  - earth observation
+  - data cube
+  - zarr
+  - Sentinel-2
+  - Sentinel-1
+  - SAR
+  - multispectral
+  - DEM
+  - land cover
+  - extreme events
+  - climate adaptation
+  - ARCEME
+  - WOCAT
+  - DHP
+
+providers:
+  - name: "CloudFerro S.A."
+    description: "Data cube production and hosting"
+    roles:
+      - producer
+      - host
+    url: "https://cloudferro.com"
+
+  - name: "ARCEME Project"
+    description: "Project team responsible for algorithm design and scientific content"
+    roles:
+      - licensor
+      - processor
+
+# Fallback spatial extent used only if no items can be loaded
+fallback_bbox: [-25.0, 34.0, 45.0, 72.0]   # rough Europe bounding box
