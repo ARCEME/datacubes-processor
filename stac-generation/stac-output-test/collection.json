@@ -1,0 +1,79 @@
+{
+  "type": "Collection",
+  "id": "arceme-datacubes",
+  "stac_version": "1.1.0",
+  "description": "Multi-sensor Earth observation data cubes generated within the ARCEME project (Adaptation and Resilience to Climate Extremes and Multi-hazard Events). Each data cube covers a 10 \u00d7 10 km area centred on an extreme weather event site from the WOCAT / DHP database. Cubes integrate four satellite sources:\n\n  \u2022 Sentinel-2 L2A \u2013 13 multispectral bands + SCL scene classification\n    (10 m / 20 m / 60 m, resampled to 10 m)\n  \u2022 Sentinel-1 RTC \u2013 VV and VH SAR backscatter (10 m)\n  \u2022 Copernicus DEM GLO-30 \u2013 digital elevation model (30 m, resampled to 10 m)\n  \u2022 ESA WorldCover 2020 \u2013 land-cover map at 10 m\n\nThe temporal window spans 12 months before and after the recorded event date. Pixel resolution is 10 m; tile size is 1000 \u00d7 1000 pixels (10 \u00d7 10 km). Cloud masking is applied to Sentinel-2 data using the SEnSeIv2/SegFormerB2 model.\n",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "ARCEME Data Cubes \u2013 Adaptation and Resilience to Climate Extremes and Multi-hazard Events"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-1007-dhp-28028/arceme-datacubes-wocat-1007-dhp-28028.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "keywords": [
+    "earth observation",
+    "data cube",
+    "zarr",
+    "Sentinel-2",
+    "Sentinel-1",
+    "SAR",
+    "multispectral",
+    "DEM",
+    "land cover",
+    "extreme events",
+    "climate adaptation",
+    "ARCEME",
+    "WOCAT",
+    "DHP"
+  ],
+  "providers": [
+    {
+      "name": "CloudFerro S.A.",
+      "description": "Data cube production and hosting",
+      "roles": [
+        "producer",
+        "host"
+      ],
+      "url": "https://cloudferro.com"
+    },
+    {
+      "name": "ARCEME Project",
+      "description": "Project team responsible for algorithm design and scientific content",
+      "roles": [
+        "licensor",
+        "processor"
+      ]
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json"
+  ],
+  "title": "ARCEME Data Cubes \u2013 Adaptation and Resilience to Climate Extremes and Multi-hazard Events",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          7.4024362241459265,
+          46.82089359693827,
+          7.5309071755969805,
+          46.91251662319103
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2017-10-27T00:00:00Z",
+          "2019-10-27T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "license": "proprietary"
+}

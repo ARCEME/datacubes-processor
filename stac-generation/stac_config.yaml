@@ -26,27 +26,10 @@ collection_description: >
 
 license: "proprietary"
 
-# ---- S3 source bucket ----
-s3_bucket: "ARCEME-DC-TEST"
-
-# Optional sub-folder inside the bucket (leave empty string if files are at root)
-s3_prefix: ""
-
-# S3 credentials / endpoint.
-# Leave as {} to use IAM role / environment variables (AWS_ACCESS_KEY_ID, etc.).
-# For CloudFerro / CREODIAS object storage, set endpoint_url.
-#
-# Example for CloudFerro:
-#   s3_kwargs:
-#     key: YOUR_ACCESS_KEY
-#     secret: YOUR_SECRET_KEY
-#     endpoint_url: "https://s3.waw3-1.cloudferro.com"
-#     client_kwargs:
-#       region_name: "waw3-1"
-#
-# Example for standard AWS (credentials from environment / ~/.aws):
-#   s3_kwargs: {}
-s3_kwargs: {}
+# ---- Source data URL ----
+# Public HTTP endpoint for the zarr files (CloudFerro Swift object storage).
+# No credentials required.
+base_url: "https://s3.waw3-2.cloudferro.com/swift/v1/ARCEME-DC-TEST"
 
 # ---- Collection-level metadata ----
 keywords:
