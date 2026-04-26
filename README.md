@@ -148,7 +148,10 @@ The `pipeline_config.yaml` contains all pipeline settings:
 ### Key Settings
 
 ```yaml
-# Input CSV with columns: location, lon, lat, event_date
+# Input CSV identifier column for output naming:
+# preferred: uid
+# fallback (legacy): DisNo.
+# Required coordinate/date columns: longitude, latitude, and date
 locations_csv: /path/to/locations.csv
 
 # Skip locations that already exist in output directories
@@ -237,6 +240,8 @@ DC__<location>__COPDEM__<UTM>__<dates>.zarr
 DC__<location>__ESALC__<UTM>__<dates>.zarr
 DC__<location>__<UTM>__<dates>.zarr  (merged cube)
 ```
+
+`<location>` is read from the `uid` column (preferred). If `uid` is missing, the pipeline uses legacy `DisNo.`.
 
 ## Skip Existing Logic
 

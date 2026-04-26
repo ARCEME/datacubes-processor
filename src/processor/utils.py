@@ -396,15 +396,19 @@ def get_location_data(table, idx):
     tuple
         (location, lon, lat, event_date)
     """
-    location = table.loc[idx, 'DisNo.']
+    # Prefer uid for output naming; keep DisNo. fallback for older CSV schemas.
+    if 'uid' in table.columns and not pd.isna(table.loc[idx, 'uid']):
+        location = table.loc[idx, 'uid']
+    elif 'DisNo.' in table.columns and not pd.isna(table.loc[idx, 'DisNo.']):
+        location = table.loc[idx, 'DisNo.']
+    else:
+        raise KeyError("Input CSV must contain a non-empty 'uid' column (preferred) or 'DisNo.' column.")
     lon = table.loc[idx, 'longitude']
     lat = table.loc[idx, 'latitude']
-    # event_date = table.loc[idx, 'start_date'] 
-
-    if 'start_date' in table.columns and not pd.isna(table.loc[idx, 'start_date']):
-        event_date = table.loc[idx, 'start_date']
-    else:
+    if 'date' in table.columns and not pd.isna(table.loc[idx, 'date']):
         event_date = table.loc[idx, 'date']
+    else:
+        raise KeyError("Input CSV must contain a non-empty 'date' column.")
 
     return location, lon, lat, event_date
 

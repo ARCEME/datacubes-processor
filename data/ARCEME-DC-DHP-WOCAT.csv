@@ -1,4 +1,4 @@
-DisNo.,longitude,latitude,start_date,wocat_id,dhp_label,country
+uid,longitude,latitude,date,wocat_id,dhp_label,country
 wocat_966_dhp_41959,4.6132,50.7778,2020-06-05,966,41959,BE
 wocat_995_dhp_83259,33.44333,37.60944,2023-02-05,995,83259,TR
 wocat_1007_dhp_28028,7.4667,46.8667,2018-10-27,1007,28028,CH
