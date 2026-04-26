@@ -69,6 +69,7 @@ merge:
 
   attrs:
     project: "ARCEME - Adaptation and Resilience to Climate Extremes and Multi-hazard Events"
+    contact: "mkluczek@cloudferro.com"
     run_name: "arceme_dc_dhp_global"
     config_file: "src/processor/arceme_dc_dhp_global_config.yaml"
     source_locations_csv: "/home/eouser/datacubes/data-cubes-arceme/data/ARCEME-DC-DHP-GLOBAL.csv"
