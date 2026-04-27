@@ -1,5 +1,6 @@
 import argparse
 import random
+import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -128,6 +129,24 @@ def save_array_png(image: np.ndarray, out_png: Path, cmap=None):
     plt.imsave(out_png, image, cmap=cmap)
 
 
+def safe_time_label(da: xr.DataArray, time_dim: str, idx: int) -> str:
+    if time_dim is None:
+        return "nodate"
+
+    if time_dim in da.coords:
+        value = da[time_dim].values[idx]
+        if np.issubdtype(np.asarray(value).dtype, np.datetime64):
+            return np.datetime_as_string(value, unit="D")
+
+        label = str(value)
+    else:
+        label = str(idx)
+
+    label = label.replace(" ", "_").replace(":", "-")
+    label = re.sub(r"[^0-9A-Za-z_\-]", "", label)
+    return label or f"idx{idx:04d}"
+
+
 def get_time_dim(da: xr.DataArray):
     for dim in da.dims:
         if dim.lower().startswith("time"):
@@ -150,6 +169,7 @@ def generate_merged_product_previews(zarr_path: Path, png_root_dir: Path):
     try:
         # S2 RGB for every S2 time step.
         if {"B04", "B03", "B02"}.issubset(ds.data_vars):
+            s2_dir = cube_out_dir / "S2L2A"
             time_dim = get_time_dim(ds["B04"])
             if time_dim is None:
                 r = ds["B04"].values.astype(np.float32)
@@ -160,7 +180,7 @@ def generate_merged_product_previews(zarr_path: Path, png_root_dir: Path):
                     robust_percentile_stretch(g),
                     robust_percentile_stretch(b),
                 ])
-                save_array_png(rgb, cube_out_dir / "s2_rgb_t0000.png")
+                save_array_png(rgb, s2_dir / "s2l2a_rgb_nodate.png")
             else:
                 n = ds.sizes[time_dim]
                 for i in range(n):
@@ -172,10 +192,12 @@ def generate_merged_product_previews(zarr_path: Path, png_root_dir: Path):
                         robust_percentile_stretch(g),
                         robust_percentile_stretch(b),
                     ])
-                    save_array_png(rgb, cube_out_dir / f"s2_rgb_t{i:04d}.png")
+                    label = safe_time_label(ds["B04"], time_dim, i)
+                    save_array_png(rgb, s2_dir / f"s2l2a_rgb_{label}.png")
 
         # S1 pseudo-RGB for every S1 time step.
         if {"vv", "vh"}.issubset(ds.data_vars):
+            s1_dir = cube_out_dir / "S1RTC"
             time_dim = get_time_dim(ds["vv"])
             if time_dim is None:
                 vv = ds["vv"].values.astype(np.float32)
@@ -186,7 +208,7 @@ def generate_merged_product_previews(zarr_path: Path, png_root_dir: Path):
                     robust_percentile_stretch(vh),
                     robust_percentile_stretch(ratio),
                 ])
-                save_array_png(s1_rgb, cube_out_dir / "s1rtc_t0000.png")
+                save_array_png(s1_rgb, s1_dir / "s1rtc_nodate.png")
             else:
                 n = ds.sizes[time_dim]
                 for i in range(n):
@@ -198,41 +220,50 @@ def generate_merged_product_previews(zarr_path: Path, png_root_dir: Path):
                         robust_percentile_stretch(vh),
                         robust_percentile_stretch(ratio),
                     ])
-                    save_array_png(s1_rgb, cube_out_dir / f"s1rtc_t{i:04d}.png")
+                    label = safe_time_label(ds["vv"], time_dim, i)
+                    save_array_png(s1_rgb, s1_dir / f"s1rtc_{label}.png")
 
         # Cloud mask for every cloud-mask time step.
         if "cloud_mask" in ds.data_vars:
+            cloud_dir = cube_out_dir / "CLOUD_MASK"
             cm = ds["cloud_mask"]
             time_dim = get_time_dim(cm)
             if time_dim is None:
                 arr = cm.values.astype(np.float32)
-                save_array_png(arr, cube_out_dir / "cloud_mask_t0000.png", cmap="tab10")
+                save_array_png(arr, cloud_dir / "cloud_mask_nodate.png", cmap="tab10")
             else:
                 n = ds.sizes[time_dim]
                 for i in range(n):
                     arr = cm.isel({time_dim: i}).values.astype(np.float32)
-                    save_array_png(arr, cube_out_dir / f"cloud_mask_t{i:04d}.png", cmap="tab10")
+                    label = safe_time_label(cm, time_dim, i)
+                    save_array_png(arr, cloud_dir / f"cloud_mask_{label}.png", cmap="tab10")
 
         # DEM single image.
         dem_var = get_dem_var(ds)
         if dem_var is not None:
+            dem_dir = cube_out_dir / "COPDEM"
             dem = ds[dem_var]
             time_dim = get_time_dim(dem)
             if time_dim is not None:
+                label = safe_time_label(dem, time_dim, 0)
                 dem_arr = dem.isel({time_dim: 0}).values.astype(np.float32)
             else:
+                label = "nodate"
                 dem_arr = dem.values.astype(np.float32)
-            save_array_png(dem_arr, cube_out_dir / "cop_dem.png", cmap="terrain")
+            save_array_png(dem_arr, dem_dir / f"cop_dem_{label}.png", cmap="terrain")
 
         # Land cover single image.
         if "ESA_LC" in ds.data_vars:
+            lc_dir = cube_out_dir / "ESALC"
             lc = ds["ESA_LC"]
             time_dim = get_time_dim(lc)
             if time_dim is not None:
+                label = safe_time_label(lc, time_dim, 0)
                 lc_arr = lc.isel({time_dim: 0}).values.astype(np.float32)
             else:
+                label = "nodate"
                 lc_arr = lc.values.astype(np.float32)
-            save_array_png(lc_arr, cube_out_dir / "land_cover.png", cmap="tab20")
+            save_array_png(lc_arr, lc_dir / f"land_cover_{label}.png", cmap="tab20")
 
         print(f"Saved preview set: {cube_out_dir}")
     finally:
