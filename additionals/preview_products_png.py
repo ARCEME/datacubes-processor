@@ -123,6 +123,122 @@ def save_preview(product: str, zarr_path: Path, png_dir: Path):
     print(f"Saved PNG: {out_png}")
 
 
+def save_array_png(image: np.ndarray, out_png: Path, cmap=None):
+    out_png.parent.mkdir(parents=True, exist_ok=True)
+    plt.imsave(out_png, image, cmap=cmap)
+
+
+def get_time_dim(da: xr.DataArray):
+    for dim in da.dims:
+        if dim.lower().startswith("time"):
+            return dim
+    return None
+
+
+def get_dem_var(ds: xr.Dataset):
+    for candidate in ["COP_DEM", "COP-DEM_GLO-30-DGED__data"]:
+        if candidate in ds.data_vars:
+            return candidate
+    return None
+
+
+def generate_merged_product_previews(zarr_path: Path, png_root_dir: Path):
+    ds = xr.open_zarr(zarr_path, consolidated=True)
+    cube_out_dir = png_root_dir / zarr_path.stem
+    cube_out_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        # S2 RGB for every S2 time step.
+        if {"B04", "B03", "B02"}.issubset(ds.data_vars):
+            time_dim = get_time_dim(ds["B04"])
+            if time_dim is None:
+                r = ds["B04"].values.astype(np.float32)
+                g = ds["B03"].values.astype(np.float32)
+                b = ds["B02"].values.astype(np.float32)
+                rgb = np.dstack([
+                    robust_percentile_stretch(r),
+                    robust_percentile_stretch(g),
+                    robust_percentile_stretch(b),
+                ])
+                save_array_png(rgb, cube_out_dir / "s2_rgb_t0000.png")
+            else:
+                n = ds.sizes[time_dim]
+                for i in range(n):
+                    r = ds["B04"].isel({time_dim: i}).values.astype(np.float32)
+                    g = ds["B03"].isel({time_dim: i}).values.astype(np.float32)
+                    b = ds["B02"].isel({time_dim: i}).values.astype(np.float32)
+                    rgb = np.dstack([
+                        robust_percentile_stretch(r),
+                        robust_percentile_stretch(g),
+                        robust_percentile_stretch(b),
+                    ])
+                    save_array_png(rgb, cube_out_dir / f"s2_rgb_t{i:04d}.png")
+
+        # S1 pseudo-RGB for every S1 time step.
+        if {"vv", "vh"}.issubset(ds.data_vars):
+            time_dim = get_time_dim(ds["vv"])
+            if time_dim is None:
+                vv = ds["vv"].values.astype(np.float32)
+                vh = ds["vh"].values.astype(np.float32)
+                ratio = np.divide(vv, vh + 1e-6)
+                s1_rgb = np.dstack([
+                    robust_percentile_stretch(vv),
+                    robust_percentile_stretch(vh),
+                    robust_percentile_stretch(ratio),
+                ])
+                save_array_png(s1_rgb, cube_out_dir / "s1rtc_t0000.png")
+            else:
+                n = ds.sizes[time_dim]
+                for i in range(n):
+                    vv = ds["vv"].isel({time_dim: i}).values.astype(np.float32)
+                    vh = ds["vh"].isel({time_dim: i}).values.astype(np.float32)
+                    ratio = np.divide(vv, vh + 1e-6)
+                    s1_rgb = np.dstack([
+                        robust_percentile_stretch(vv),
+                        robust_percentile_stretch(vh),
+                        robust_percentile_stretch(ratio),
+                    ])
+                    save_array_png(s1_rgb, cube_out_dir / f"s1rtc_t{i:04d}.png")
+
+        # Cloud mask for every cloud-mask time step.
+        if "cloud_mask" in ds.data_vars:
+            cm = ds["cloud_mask"]
+            time_dim = get_time_dim(cm)
+            if time_dim is None:
+                arr = cm.values.astype(np.float32)
+                save_array_png(arr, cube_out_dir / "cloud_mask_t0000.png", cmap="tab10")
+            else:
+                n = ds.sizes[time_dim]
+                for i in range(n):
+                    arr = cm.isel({time_dim: i}).values.astype(np.float32)
+                    save_array_png(arr, cube_out_dir / f"cloud_mask_t{i:04d}.png", cmap="tab10")
+
+        # DEM single image.
+        dem_var = get_dem_var(ds)
+        if dem_var is not None:
+            dem = ds[dem_var]
+            time_dim = get_time_dim(dem)
+            if time_dim is not None:
+                dem_arr = dem.isel({time_dim: 0}).values.astype(np.float32)
+            else:
+                dem_arr = dem.values.astype(np.float32)
+            save_array_png(dem_arr, cube_out_dir / "cop_dem.png", cmap="terrain")
+
+        # Land cover single image.
+        if "ESA_LC" in ds.data_vars:
+            lc = ds["ESA_LC"]
+            time_dim = get_time_dim(lc)
+            if time_dim is not None:
+                lc_arr = lc.isel({time_dim: 0}).values.astype(np.float32)
+            else:
+                lc_arr = lc.values.astype(np.float32)
+            save_array_png(lc_arr, cube_out_dir / "land_cover.png", cmap="tab20")
+
+        print(f"Saved preview set: {cube_out_dir}")
+    finally:
+        ds.close()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Create PNG previews from datacube products")
     parser.add_argument(
@@ -142,6 +258,11 @@ def main():
         help="How to pick zarr per product (default: latest)",
     )
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--merged-dir",
+        default=None,
+        help="Optional directory with merged .zarr cubes. If provided, previews are generated in per-cube subfolders.",
+    )
     args = parser.parse_args()
 
     random.seed(args.seed)
@@ -149,6 +270,23 @@ def main():
     base_dir = Path(args.base_dir)
     png_dir = Path(args.png_dir)
     png_dir.mkdir(parents=True, exist_ok=True)
+
+    if args.merged_dir:
+        merged_dir = Path(args.merged_dir)
+        if not merged_dir.exists():
+            raise FileNotFoundError(f"Merged directory not found: {merged_dir}")
+
+        merged_zarrs = sorted(merged_dir.glob("*.zarr"))
+        if not merged_zarrs:
+            print(f"No merged cubes found in {merged_dir}")
+            return
+
+        for zarr_path in merged_zarrs:
+            try:
+                generate_merged_product_previews(zarr_path, png_dir)
+            except Exception as exc:
+                print(f"Failed merged ({zarr_path.name}): {exc}")
+        return
 
     for product, subdir in PRODUCT_DIRS.items():
         product_dir = base_dir / subdir

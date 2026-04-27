@@ -231,21 +231,43 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
 
     merge_groups = {}
     final_prefix_name = {}
+    merge_meta = {}
 
     for prefix, items in groups.items():
-        s2 = items.get("S2L2A", [])
-        s1 = items.get("S1RTC", [])
+        expected_sources = ["S2L2A", "S1RTC", "COPDEM", "ESALC"]
+        source_maps = {
+            source_name: {d: p for p, d in items.get(source_name, [])}
+            for source_name in expected_sources
+        }
 
-        s2_map = {d: p for p, d in s2}
-        s1_map = {d: p for p, d in s1}
+        s2_dates = set(source_maps["S2L2A"].keys())
+        s1_dates = set(source_maps["S1RTC"].keys())
+        common_dynamic_dates = sorted(s2_dates & s1_dates)
 
-        common_dates = sorted(set(s2_map.keys()) & set(s1_map.keys()))
-        if not common_dates:
-            print(f"[MERGE] Missing common S2/S1 date for {prefix}")
-            continue
+        if common_dynamic_dates:
+            # Preferred path: use a matching S2/S1 dynamic range.
+            date_range = common_dynamic_dates[-1]
+        else:
+            # Fallback for incomplete data: use latest available dynamic range.
+            dynamic_candidates = sorted(s2_dates | s1_dates)
+            if not dynamic_candidates:
+                print(f"[MERGE] No S2/S1 dynamic cubes available for {prefix}; skipping")
+                continue
+            date_range = dynamic_candidates[-1]
 
-        date_range = common_dates[-1]
-        final_files = [s2_map[date_range], s1_map[date_range]]
+        final_files = []
+        available_sources = []
+
+        for dynamic_source in ["S2L2A", "S1RTC"]:
+            src_map = source_maps[dynamic_source]
+            if date_range in src_map:
+                final_files.append(src_map[date_range])
+                available_sources.append(dynamic_source)
+            elif src_map:
+                # Use most recent dynamic cube when exact date_range is unavailable.
+                fallback_date = sorted(src_map.keys())[-1]
+                final_files.append(src_map[fallback_date])
+                available_sources.append(dynamic_source)
 
         for aux_name in ["COPDEM", "ESALC"]:
             aux_items = items.get(aux_name, [])
@@ -256,10 +278,19 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
                 final_files.append(aux_items_sorted[-1][0])
             else:
                 final_files.append(aux_items_sorted[0][0])
+            available_sources.append(aux_name)
+
+        missing_sources = [s for s in expected_sources if s not in available_sources]
+        if missing_sources:
+            print(f"[MERGE] Incomplete inputs for {prefix}; missing: {', '.join(missing_sources)}")
 
         final_prefix = f"{prefix}__{date_range}"
         merge_groups[prefix] = final_files
         final_prefix_name[prefix] = final_prefix
+        merge_meta[prefix] = {
+            "available_sources": available_sources,
+            "missing_sources": missing_sources,
+        }
 
     for prefix, paths in merge_groups.items():
         final_prefix = final_prefix_name[prefix]
@@ -287,6 +318,11 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
 
         merged = merged.chunk(chunk_dict)
         merged.attrs.update(config["merge"]["attrs"])
+
+        # Keep only a single compact availability marker in metadata.
+        cube_meta = merge_meta.get(prefix, {"available_sources": [], "missing_sources": []})
+        missing_sources = cube_meta["missing_sources"]
+        merged.attrs["missing_datasets"] = ", ".join(missing_sources) if missing_sources else "none"
 
         encoding = {}
         compressor = zarr.Blosc(cname="zstd", clevel=3, shuffle=1)
