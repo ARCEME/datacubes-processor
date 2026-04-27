@@ -530,9 +530,20 @@ def build_cubedataset_from_items(
         if is_s1:
             # Extract orbit state from STAC metadata before coordinates are dropped
             if 'sat:orbit_state' in cube.coords:
-                for i in range(cube.sizes['time']):
-                    t_key = pd.Timestamp(cube.time.values[i]).floor('min')
-                    orbit_state_map[t_key] = str(cube.coords['sat:orbit_state'].values[i])
+                orbit_values = np.asarray(cube.coords['sat:orbit_state'].values)
+                if orbit_values.ndim == 0:
+                    # Some stacks expose one scalar orbit state for all timestamps.
+                    orbit_value = str(orbit_values.item())
+                    for i in range(cube.sizes['time']):
+                        t_key = pd.Timestamp(cube.time.values[i]).floor('min')
+                        orbit_state_map[t_key] = orbit_value
+                else:
+                    for i in range(cube.sizes['time']):
+                        t_key = pd.Timestamp(cube.time.values[i]).floor('min')
+                        if i < orbit_values.shape[0]:
+                            orbit_state_map[t_key] = str(orbit_values[i])
+                        elif orbit_values.shape[0] > 0:
+                            orbit_state_map[t_key] = str(orbit_values[-1])
             cube = cube.assign_coords(time=cube["time"].dt.floor("min"))
         else:
             # Mosaic items from the same day into a single image

@@ -157,19 +157,27 @@ def create_cube_for_location(
 
     stac_url = "https://stac.dataspace.copernicus.eu/v1/" if source == "cdse" else "https://planetarycomputer.microsoft.com/api/stac/v1"
 
-    cubedataset = build_cubedataset_from_items(
-        items=items,
-        data_collections=collections,
-        bbox_utm=bbox_utm,
-        epsg=epsg,
-        resolution=resolution,
-        stac_url=stac_url,
-        start_date=start_date,
-        end_date=end_date,
-        location=location,
-    )
+    try:
+        cubedataset = build_cubedataset_from_items(
+            items=items,
+            data_collections=collections,
+            bbox_utm=bbox_utm,
+            epsg=epsg,
+            resolution=resolution,
+            stac_url=stac_url,
+            start_date=start_date,
+            end_date=end_date,
+            location=location,
+        )
+    except Exception as e:
+        print(f"[BUILD-ERROR] {location}: {e} - skipping")
+        return False
 
-    return save_cube_with_retries(cubedataset, location, start_date, end_date, base_output_dir=output_dir)
+    try:
+        return save_cube_with_retries(cubedataset, location, start_date, end_date, base_output_dir=output_dir)
+    except Exception as e:
+        print(f"[SAVE-ERROR] {location}: {e} - skipping")
+        return False
 
 
 def run_cloud_mask(s2_dir: str, cloudmask_dir: str, skip_existing: bool) -> None:
