@@ -362,13 +362,13 @@ python visualize_events_map.py
 Outputs (saved to `datacubes-processor/`):
 
 **EMDAT extreme events**
-![EMDAT extreme events](../datacubes-processor/map_EMDAT.png)
+![EMDAT extreme events](data/map_EMDAT.png)
 
 **GLOBAL extreme events**
-![GLOBAL extreme events](../datacubes-processor/map_GLOBAL.png)
+![GLOBAL extreme events](data/map_GLOBAL.png)
 
 **WOCAT extreme events**
-![WOCAT extreme events](../datacubes-processor/map_WOCAT.png)
+![WOCAT extreme events](data/map_WOCAT.png)
 
 Requires: `geopandas`, `matplotlib`, `geodatasets` (country borders downloaded and cached on first run).
 
