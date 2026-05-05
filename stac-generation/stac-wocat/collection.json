@@ -1,0 +1,173 @@
+{
+  "type": "Collection",
+  "id": "arceme-datacubes-wocat",
+  "stac_version": "1.1.0",
+  "description": "Multi-sensor Earth observation data cubes for European extreme weather event sites from the WOCAT (World Overview of Conservation Approaches and Technologies) and DHP (Disaster Hazard Points) databases, generated within the ARCEME project (Adaptation and Resilience to Climate Extremes and Multi-hazard Events). Each cube covers a 10 \u00d7 10 km area centred on the event location and integrates: Sentinel-2 L2A (13 bands + SCL, 10 m), Sentinel-1 RTC (VV + VH, 10 m), Copernicus DEM GLO-30 (10 m resampled), and ESA WorldCover 2020 (10 m). The temporal window spans \u00b112 months around the event date. Cloud masking is applied using SEnSeIv2/SegFormerB2.\n",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "ARCEME Data Cubes \u2013 WOCAT/DHP European Sites"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1007-dhp-28028/arceme-datacubes-wocat-wocat-1007-dhp-28028.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1015-dhp-55953/arceme-datacubes-wocat-wocat-1015-dhp-55953.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1018-dhp-75567/arceme-datacubes-wocat-wocat-1018-dhp-75567.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1136-dhp-32935/arceme-datacubes-wocat-wocat-1136-dhp-32935.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1225-dhp-79923/arceme-datacubes-wocat-wocat-1225-dhp-79923.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1248-dhp-76972/arceme-datacubes-wocat-wocat-1248-dhp-76972.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1261-dhp-82683/arceme-datacubes-wocat-wocat-1261-dhp-82683.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1286-dhp-90224/arceme-datacubes-wocat-wocat-1286-dhp-90224.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1582-dhp-77027/arceme-datacubes-wocat-wocat-1582-dhp-77027.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-1586-dhp-29780/arceme-datacubes-wocat-wocat-1586-dhp-29780.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-2690-dhp-86806/arceme-datacubes-wocat-wocat-2690-dhp-86806.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-2950-dhp-100770/arceme-datacubes-wocat-wocat-2950-dhp-100770.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-3164-dhp-75505/arceme-datacubes-wocat-wocat-3164-dhp-75505.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-4126-dhp-75508/arceme-datacubes-wocat-wocat-4126-dhp-75508.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-5681-dhp-34896/arceme-datacubes-wocat-wocat-5681-dhp-34896.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-5925-dhp-75678/arceme-datacubes-wocat-wocat-5925-dhp-75678.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-5933-dhp-68907/arceme-datacubes-wocat-wocat-5933-dhp-68907.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-6250-dhp-26585/arceme-datacubes-wocat-wocat-6250-dhp-26585.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-6820-dhp-76886/arceme-datacubes-wocat-wocat-6820-dhp-76886.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-966-dhp-41959/arceme-datacubes-wocat-wocat-966-dhp-41959.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-wocat-wocat-995-dhp-83259/arceme-datacubes-wocat-wocat-995-dhp-83259.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "title": "ARCEME Data Cubes \u2013 WOCAT/DHP European Sites",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -20.502846611896075,
+          37.56470410341124,
+          33.50018063443982,
+          63.87764807415107
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2017-08-24T00:00:00Z",
+          "2024-11-04T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "license": "MIT",
+  "keywords": [
+    "earth observation",
+    "data cube",
+    "zarr",
+    "Sentinel-2",
+    "Sentinel-1",
+    "DEM",
+    "land cover",
+    "extreme events",
+    "climate adaptation",
+    "ARCEME",
+    "WOCAT",
+    "DHP",
+    "Europe"
+  ],
+  "providers": [
+    {
+      "name": "CloudFerro S.A.",
+      "roles": [
+        "producer",
+        "host"
+      ],
+      "url": "https://cloudferro.com"
+    },
+    {
+      "name": "ARCEME Project",
+      "roles": [
+        "licensor",
+        "processor"
+      ]
+    }
+  ]
+}

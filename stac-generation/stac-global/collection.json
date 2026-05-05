@@ -1,0 +1,1197 @@
+{
+  "type": "Collection",
+  "id": "arceme-datacubes-global",
+  "stac_version": "1.1.0",
+  "description": "Multi-sensor Earth observation data cubes for globally distributed extreme weather event sites from the DHP (Disaster Hazard Points) database, generated within the ARCEME project (Adaptation and Resilience to Climate Extremes and Multi-hazard Events). Each cube covers a 10 \u00d7 10 km area centred on the event location and integrates: Sentinel-2 L2A (13 bands + SCL, 10 m), Sentinel-1 RTC (VV + VH, 10 m), Copernicus DEM GLO-30 (10 m resampled), and ESA WorldCover 2020 (10 m). Two cube variants exist per event site \u2014 suffix \"_d\" (DHP-only) and \"_dhp\" (DHP+WOCAT). The temporal window spans \u00b112 months around the event date. Cloud masking is applied using SEnSeIv2/SegFormerB2.\n",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "ARCEME Data Cubes \u2013 DHP Global Sites"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-10051-d/arceme-datacubes-global-10051-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-10051-dhp/arceme-datacubes-global-10051-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-101342-d/arceme-datacubes-global-101342-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-101342-dhp/arceme-datacubes-global-101342-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-10203-d/arceme-datacubes-global-10203-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-10203-dhp/arceme-datacubes-global-10203-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-11992-d/arceme-datacubes-global-11992-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-11992-dhp/arceme-datacubes-global-11992-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-16816-d/arceme-datacubes-global-16816-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-16816-dhp/arceme-datacubes-global-16816-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-17006-d/arceme-datacubes-global-17006-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-17006-dhp/arceme-datacubes-global-17006-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-17799-d/arceme-datacubes-global-17799-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-17799-dhp/arceme-datacubes-global-17799-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19270-d/arceme-datacubes-global-19270-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19270-dhp/arceme-datacubes-global-19270-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19343-d/arceme-datacubes-global-19343-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19343-dhp/arceme-datacubes-global-19343-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19390-d/arceme-datacubes-global-19390-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19390-dhp/arceme-datacubes-global-19390-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19743-d/arceme-datacubes-global-19743-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-19743-dhp/arceme-datacubes-global-19743-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-20344-d/arceme-datacubes-global-20344-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-20344-dhp/arceme-datacubes-global-20344-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-20678-d/arceme-datacubes-global-20678-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-20678-dhp/arceme-datacubes-global-20678-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-20750-d/arceme-datacubes-global-20750-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-20750-dhp/arceme-datacubes-global-20750-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-21039-d/arceme-datacubes-global-21039-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-21039-dhp/arceme-datacubes-global-21039-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-22144-d/arceme-datacubes-global-22144-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-22144-dhp/arceme-datacubes-global-22144-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-22148-d/arceme-datacubes-global-22148-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-22148-dhp/arceme-datacubes-global-22148-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-23356-d/arceme-datacubes-global-23356-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-23356-dhp/arceme-datacubes-global-23356-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-23586-d/arceme-datacubes-global-23586-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-23586-dhp/arceme-datacubes-global-23586-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-25288-d/arceme-datacubes-global-25288-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-25288-dhp/arceme-datacubes-global-25288-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-25524-d/arceme-datacubes-global-25524-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-25524-dhp/arceme-datacubes-global-25524-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-26934-d/arceme-datacubes-global-26934-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-26934-dhp/arceme-datacubes-global-26934-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-30711-d/arceme-datacubes-global-30711-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-30711-dhp/arceme-datacubes-global-30711-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-30765-d/arceme-datacubes-global-30765-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-30765-dhp/arceme-datacubes-global-30765-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-30770-d/arceme-datacubes-global-30770-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-30770-dhp/arceme-datacubes-global-30770-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-33681-d/arceme-datacubes-global-33681-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-33681-dhp/arceme-datacubes-global-33681-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-35636-d/arceme-datacubes-global-35636-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-35636-dhp/arceme-datacubes-global-35636-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37490-d/arceme-datacubes-global-37490-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37490-dhp/arceme-datacubes-global-37490-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37551-d/arceme-datacubes-global-37551-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37551-dhp/arceme-datacubes-global-37551-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37594-d/arceme-datacubes-global-37594-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37594-dhp/arceme-datacubes-global-37594-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37683-d/arceme-datacubes-global-37683-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-37683-dhp/arceme-datacubes-global-37683-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-38739-d/arceme-datacubes-global-38739-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-38739-dhp/arceme-datacubes-global-38739-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-40819-d/arceme-datacubes-global-40819-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-40819-dhp/arceme-datacubes-global-40819-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-41188-d/arceme-datacubes-global-41188-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-41188-dhp/arceme-datacubes-global-41188-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-42792-d/arceme-datacubes-global-42792-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-42792-dhp/arceme-datacubes-global-42792-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-42954-d/arceme-datacubes-global-42954-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-42954-dhp/arceme-datacubes-global-42954-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-45854-d/arceme-datacubes-global-45854-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-45854-dhp/arceme-datacubes-global-45854-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-47076-d/arceme-datacubes-global-47076-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-47076-dhp/arceme-datacubes-global-47076-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-51129-d/arceme-datacubes-global-51129-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-51129-dhp/arceme-datacubes-global-51129-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-54519-d/arceme-datacubes-global-54519-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-54519-dhp/arceme-datacubes-global-54519-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-56241-d/arceme-datacubes-global-56241-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-56241-dhp/arceme-datacubes-global-56241-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57632-d/arceme-datacubes-global-57632-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57632-dhp/arceme-datacubes-global-57632-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57695-d/arceme-datacubes-global-57695-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57695-dhp/arceme-datacubes-global-57695-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57707-d/arceme-datacubes-global-57707-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57707-dhp/arceme-datacubes-global-57707-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57979-d/arceme-datacubes-global-57979-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-57979-dhp/arceme-datacubes-global-57979-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-58472-d/arceme-datacubes-global-58472-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-58472-dhp/arceme-datacubes-global-58472-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-58685-d/arceme-datacubes-global-58685-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-58685-dhp/arceme-datacubes-global-58685-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-59434-d/arceme-datacubes-global-59434-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-59434-dhp/arceme-datacubes-global-59434-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60134-d/arceme-datacubes-global-60134-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60134-dhp/arceme-datacubes-global-60134-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60285-d/arceme-datacubes-global-60285-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60285-dhp/arceme-datacubes-global-60285-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60302-d/arceme-datacubes-global-60302-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60302-dhp/arceme-datacubes-global-60302-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60826-d/arceme-datacubes-global-60826-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-60826-dhp/arceme-datacubes-global-60826-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-61276-d/arceme-datacubes-global-61276-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-61276-dhp/arceme-datacubes-global-61276-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-62645-d/arceme-datacubes-global-62645-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-62645-dhp/arceme-datacubes-global-62645-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-62878-d/arceme-datacubes-global-62878-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-62878-dhp/arceme-datacubes-global-62878-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-62977-d/arceme-datacubes-global-62977-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-62977-dhp/arceme-datacubes-global-62977-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-64667-d/arceme-datacubes-global-64667-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-64667-dhp/arceme-datacubes-global-64667-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-65078-d/arceme-datacubes-global-65078-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-65078-dhp/arceme-datacubes-global-65078-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-66578-d/arceme-datacubes-global-66578-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-66578-dhp/arceme-datacubes-global-66578-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-66584-d/arceme-datacubes-global-66584-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-66584-dhp/arceme-datacubes-global-66584-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-66587-d/arceme-datacubes-global-66587-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-66587-dhp/arceme-datacubes-global-66587-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67022-d/arceme-datacubes-global-67022-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67022-dhp/arceme-datacubes-global-67022-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67058-d/arceme-datacubes-global-67058-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67058-dhp/arceme-datacubes-global-67058-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67335-d/arceme-datacubes-global-67335-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67335-dhp/arceme-datacubes-global-67335-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67505-d/arceme-datacubes-global-67505-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67505-dhp/arceme-datacubes-global-67505-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67673-d/arceme-datacubes-global-67673-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67673-dhp/arceme-datacubes-global-67673-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67884-d/arceme-datacubes-global-67884-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-67884-dhp/arceme-datacubes-global-67884-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-68162-d/arceme-datacubes-global-68162-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-68162-dhp/arceme-datacubes-global-68162-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-68164-d/arceme-datacubes-global-68164-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-68164-dhp/arceme-datacubes-global-68164-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69109-d/arceme-datacubes-global-69109-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69109-dhp/arceme-datacubes-global-69109-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69258-d/arceme-datacubes-global-69258-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69258-dhp/arceme-datacubes-global-69258-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69898-d/arceme-datacubes-global-69898-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69898-dhp/arceme-datacubes-global-69898-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69901-d/arceme-datacubes-global-69901-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-69901-dhp/arceme-datacubes-global-69901-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-70416-d/arceme-datacubes-global-70416-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-70416-dhp/arceme-datacubes-global-70416-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-71123-d/arceme-datacubes-global-71123-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-71123-dhp/arceme-datacubes-global-71123-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-71807-d/arceme-datacubes-global-71807-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-71807-dhp/arceme-datacubes-global-71807-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-71985-d/arceme-datacubes-global-71985-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-71985-dhp/arceme-datacubes-global-71985-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-72032-d/arceme-datacubes-global-72032-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-72032-dhp/arceme-datacubes-global-72032-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-72388-d/arceme-datacubes-global-72388-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-72388-dhp/arceme-datacubes-global-72388-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-73280-d/arceme-datacubes-global-73280-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-73280-dhp/arceme-datacubes-global-73280-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-73951-d/arceme-datacubes-global-73951-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-73951-dhp/arceme-datacubes-global-73951-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-74383-d/arceme-datacubes-global-74383-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-74383-dhp/arceme-datacubes-global-74383-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-74542-d/arceme-datacubes-global-74542-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-74542-dhp/arceme-datacubes-global-74542-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-75582-d/arceme-datacubes-global-75582-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-75582-dhp/arceme-datacubes-global-75582-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-77872-d/arceme-datacubes-global-77872-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-77872-dhp/arceme-datacubes-global-77872-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-79445-d/arceme-datacubes-global-79445-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-79445-dhp/arceme-datacubes-global-79445-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-79473-d/arceme-datacubes-global-79473-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-79473-dhp/arceme-datacubes-global-79473-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-80358-d/arceme-datacubes-global-80358-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-80358-dhp/arceme-datacubes-global-80358-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-80920-d/arceme-datacubes-global-80920-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-80920-dhp/arceme-datacubes-global-80920-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81379-d/arceme-datacubes-global-81379-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81379-dhp/arceme-datacubes-global-81379-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81701-d/arceme-datacubes-global-81701-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81701-dhp/arceme-datacubes-global-81701-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81874-d/arceme-datacubes-global-81874-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81874-dhp/arceme-datacubes-global-81874-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81877-d/arceme-datacubes-global-81877-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-81877-dhp/arceme-datacubes-global-81877-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-82863-d/arceme-datacubes-global-82863-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-82863-dhp/arceme-datacubes-global-82863-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-82955-d/arceme-datacubes-global-82955-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-82955-dhp/arceme-datacubes-global-82955-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-83004-d/arceme-datacubes-global-83004-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-83004-dhp/arceme-datacubes-global-83004-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-84892-d/arceme-datacubes-global-84892-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-84892-dhp/arceme-datacubes-global-84892-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-85482-d/arceme-datacubes-global-85482-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-85482-dhp/arceme-datacubes-global-85482-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-86198-d/arceme-datacubes-global-86198-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-86198-dhp/arceme-datacubes-global-86198-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-86640-d/arceme-datacubes-global-86640-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-86640-dhp/arceme-datacubes-global-86640-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-86806-d/arceme-datacubes-global-86806-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-86806-dhp/arceme-datacubes-global-86806-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-89755-d/arceme-datacubes-global-89755-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-89755-dhp/arceme-datacubes-global-89755-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-89757-d/arceme-datacubes-global-89757-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-89757-dhp/arceme-datacubes-global-89757-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-92271-d/arceme-datacubes-global-92271-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-92271-dhp/arceme-datacubes-global-92271-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-92963-d/arceme-datacubes-global-92963-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-92963-dhp/arceme-datacubes-global-92963-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-93165-d/arceme-datacubes-global-93165-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-93165-dhp/arceme-datacubes-global-93165-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-93324-d/arceme-datacubes-global-93324-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-93324-dhp/arceme-datacubes-global-93324-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96274-d/arceme-datacubes-global-96274-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96274-dhp/arceme-datacubes-global-96274-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96279-d/arceme-datacubes-global-96279-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96279-dhp/arceme-datacubes-global-96279-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96312-d/arceme-datacubes-global-96312-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96312-dhp/arceme-datacubes-global-96312-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96740-d/arceme-datacubes-global-96740-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-96740-dhp/arceme-datacubes-global-96740-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-99140-d/arceme-datacubes-global-99140-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-99140-dhp/arceme-datacubes-global-99140-dhp.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-99349-d/arceme-datacubes-global-99349-d.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "./arceme-datacubes-global-99349-dhp/arceme-datacubes-global-99349-dhp.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "title": "ARCEME Data Cubes \u2013 DHP Global Sites",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -113.96814056492562,
+          -38.64594819653255,
+          149.64919494030772,
+          55.04566833095018
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2015-01-11T00:00:00Z",
+          "2024-11-12T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "license": "MIT",
+  "keywords": [
+    "earth observation",
+    "data cube",
+    "zarr",
+    "Sentinel-2",
+    "Sentinel-1",
+    "DEM",
+    "land cover",
+    "extreme events",
+    "climate adaptation",
+    "ARCEME",
+    "DHP",
+    "global"
+  ],
+  "providers": [
+    {
+      "name": "CloudFerro S.A.",
+      "roles": [
+        "producer",
+        "host"
+      ],
+      "url": "https://cloudferro.com"
+    },
+    {
+      "name": "ARCEME Project",
+      "roles": [
+        "licensor",
+        "processor"
+      ]
+    }
+  ]
+}

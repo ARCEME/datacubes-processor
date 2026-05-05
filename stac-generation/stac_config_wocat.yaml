@@ -1,0 +1,42 @@
+collection_id: arceme-datacubes-wocat
+
+collection_title: "ARCEME Data Cubes – WOCAT/DHP European Sites"
+
+collection_description: >
+  Multi-sensor Earth observation data cubes for European extreme weather event sites
+  from the WOCAT (World Overview of Conservation Approaches and Technologies) and
+  DHP (Disaster Hazard Points) databases, generated within the ARCEME project
+  (Adaptation and Resilience to Climate Extremes and Multi-hazard Events).
+  Each cube covers a 10 × 10 km area centred on the event location and integrates:
+  Sentinel-2 L2A (13 bands + SCL, 10 m), Sentinel-1 RTC (VV + VH, 10 m),
+  Copernicus DEM GLO-30 (10 m resampled), and ESA WorldCover 2020 (10 m).
+  The temporal window spans ±12 months around the event date.
+  Cloud masking is applied using SEnSeIv2/SegFormerB2.
+
+license: "MIT"
+
+base_url: "https://s3.waw4-1.cloudferro.com/swift/v1/ARCEME-DC-DHP-WOCAT"
+
+keywords:
+  - earth observation
+  - data cube
+  - zarr
+  - Sentinel-2
+  - Sentinel-1
+  - DEM
+  - land cover
+  - extreme events
+  - climate adaptation
+  - ARCEME
+  - WOCAT
+  - DHP
+  - Europe
+
+providers:
+  - name: "CloudFerro S.A."
+    roles: [producer, host]
+    url: "https://cloudferro.com"
+  - name: "ARCEME Project"
+    roles: [licensor, processor]
+
+fallback_bbox: [-25.0, 34.0, 45.0, 72.0]
