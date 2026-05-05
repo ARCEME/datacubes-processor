@@ -2,16 +2,19 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
 
 ## Overview
 
+ARCEME Data Cube Pipeline is an end-to-end orchestrator for building spatiotemporal satellite datacubes around disaster event locations. It takes a CSV of coordinates and event dates, queries Sentinel-2 L2A, Sentinel-1 RTC, Copernicus DEM, and ESA WorldCover, applies deep-learning-based cloud masking via SEnSeIv2, and merges all sources into a single rechunked Zarr archive — analysis-ready out of the box. Designed for batch processing of large location sets, with built-in resume support, Docker compatibility, and a single YAML configuration file.
+
 The pipeline orchestrator creates multi-source satellite datacubes for ARCEME project locations. It processes following datasets:
-- **Sentinel-2 L2A** (CDSE or Planetary Computer)
-- **Sentinel-1 RTC** (Planetary Computer)
-- **Copernicus DEM** (CDSE)
-- **ESA WorldCover** (Planetary Computer)
+- **Sentinel-2 L2A** 
+- **Sentinel-1 RTC** 
+- **Copernicus DEM** 
+- **ESA WorldCover**
 
 ## Quick Start
 
@@ -296,7 +299,7 @@ GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR
 ```
 
 Endpoint choice:
-- If you are a CREODIAS user, use `odata.cloudferro.com`.
+- If you are a CREODIAS user, use `eodata.cloudferro.com`.
 - Otherwise, use CDSE endpoint `eodata.dataspace.copernicus.eu`.
 
 For CDSE, generate S3 credentials first:
@@ -341,3 +344,11 @@ data-cubes-arceme/
 
 ### Archive (Do Not Use)
 - `src/processor/archive/*` - Old standalone scripts replaced by orchestrator
+
+### S3 public bucket with data cubes
+* [ARCEME-DC-DHP-EMDAT](https://s3.waw4-1.cloudferro.com/swift/v1/ARCEME-DC-DHP-EMDAT/)
+* [ARCEME-DC-DHP-GLOBAL](https://s3.waw4-1.cloudferro.com/swift/v1/ARCEME-DC-DHP-GLOBAL/)
+* [ARCEME-DC-DHP-WOCAT](https://s3.waw4-1.cloudferro.com/swift/v1/ARCEME-DC-DHP-WOCAT/)
+
+### Maintainer contact
+Marcin Kluczek (mkluczek@cloudferro.com) CloudFerro, Poland
