@@ -222,7 +222,7 @@ def parse_prefix_and_date(path: str) -> Tuple[str, str]:
     return m.group(1), m.group(2)
 
 
-def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_existing: bool) -> None:
+def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_existing: bool, force_locations: set = None) -> None:
     ensure_dir(output_dir)
 
     files_by_prefix = {}
@@ -303,7 +303,8 @@ def merge_cubes(config: Dict, input_dirs: Dict[str, str], output_dir: str, skip_
     for prefix, paths in merge_groups.items():
         final_prefix = final_prefix_name[prefix]
         output_path = os.path.join(output_dir, f"{final_prefix}.zarr")
-        if skip_existing and os.path.exists(output_path):
+        is_forced = force_locations and prefix in force_locations
+        if skip_existing and os.path.exists(output_path) and not is_forced:
             print(f"[SKIP] merged exists: {output_path}")
             continue
 
@@ -485,7 +486,8 @@ def main(config_path: str = None) -> None:
             "COPDEM": cfg["output_dirs"]["copdem"],
             "ESALC": cfg["output_dirs"]["esalc"],
         }
-        merge_cubes(cfg, input_dirs, cfg["output_dirs"]["merged"], cfg["skip_existing"])
+        force_locations = set(cfg["merge"].get("force_locations") or [])
+        merge_cubes(cfg, input_dirs, cfg["output_dirs"]["merged"], cfg["skip_existing"], force_locations)
 
 
 if __name__ == "__main__":
