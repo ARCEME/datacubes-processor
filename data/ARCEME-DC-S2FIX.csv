@@ -1,0 +1,3 @@
+dhp_label,dlabel,longitude,latitude,tp_int,date,source,unveg,sparse,teow,biome,uid
+41188,67384,18.1,6.1,11.510871,2020-05-20,dhp,0.0,0.0,7,"Tropical & Subtropical Grasslands, Savannas & Shrublands",41188_dhp
+60285,90324,-113.9,50.9,16.628565,2021-08-16,dhp,0.125,0.0046296297,8,"Temperate Grasslands, Savannas & Shrublands",60285_dhp
