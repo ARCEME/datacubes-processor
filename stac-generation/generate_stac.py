@@ -66,6 +66,13 @@ _PATTERN_GLOBAL = re.compile(
     r"DC__(\d+)_(d|dhp)__(\d{4}-\d{2}-\d{2})__(\d{4}-\d{2}-\d{2})\.zarr$"
 )
 
+# EMDAT bucket:  DC__2015-0011-MOZ__2014-01-01__2016-01-01.zarr
+#                DC__2015-0158-KEN-P__2014-04-04__2016-04-04.zarr
+# id = EM-DAT disaster number, e.g. 2015-0011-MOZ (optional -X variant suffix)
+_PATTERN_EMDAT = re.compile(
+    r"DC__([A-Za-z0-9\-]+?)__(\d{4}-\d{2}-\d{2})__(\d{4}-\d{2}-\d{2})\.zarr$"
+)
+
 ARCEME_TIME_DIMS = [
     "time_sentinel_2_l2a",
     "time_sentinel_1_rtc",
@@ -105,6 +112,18 @@ def parse_zarr_filename(name: str) -> dict | None:
             "item_suffix": f"{event_id}-{suffix}",
             "title_extra": f"event {event_id} ({suffix.upper()})",
             "pattern":     "global",
+        }
+
+    # EMDAT last: its id is free-form, so this pattern is the most permissive.
+    m = _PATTERN_EMDAT.search(name)
+    if m:
+        emdat_id, start, end = m.groups()
+        return {
+            "start_date":  start,
+            "end_date":    end,
+            "item_suffix": emdat_id.lower(),
+            "title_extra": f"EM-DAT {emdat_id}",
+            "pattern":     "emdat",
         }
 
     return None
@@ -215,7 +234,12 @@ def build_stac_item(
 
     bbox     = get_wgs84_bbox(ds)
     geometry = json.loads(json.dumps(shapely.box(*bbox).__geo_interface__))
-    item_id  = f"{collection_id}-{file_meta['item_suffix']}"
+    # item id: "suffix" (default) -> "{collection_id}-{item_suffix}" (as in the
+    # WOCAT/GLOBAL collections); "filename" -> the on-disk cube name w/o .zarr.
+    if config.get("item_id_mode") == "filename":
+        item_id = zarr_name[:-5] if zarr_name.endswith(".zarr") else zarr_name
+    else:
+        item_id = f"{collection_id}-{file_meta['item_suffix']}"
 
     _internal = {
         "epsg", "central_x", "central_y", "edge_size_px", "edge_size_m",

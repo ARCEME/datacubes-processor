@@ -1,0 +1,40 @@
+collection_id: arceme-datacubes-emdat
+
+collection_title: "ARCEME Data Cubes – EM-DAT Disaster Sites"
+
+collection_description: >
+  Multi-sensor Earth observation data cubes centred on disaster events from the
+  EM-DAT International Disaster Database, generated within the ARCEME project
+  (Adaptation and Resilience to Climate Extremes and Multi-hazard Events).
+  Each cube covers a 10 × 10 km area centred on the event location and integrates:
+  Sentinel-2 L2A (13 bands + SCL, 10 m), Sentinel-1 RTC (VV + VH, 10 m),
+  Copernicus DEM GLO-30 (10 m resampled), and ESA WorldCover 2020 (10 m).
+  The temporal window spans ±12 months around the event date.
+  Cloud masking is applied using SEnSeIv2/SegFormerB2.
+
+license: "MIT"
+
+base_url: "https://s3.waw4-1.cloudferro.com/swift/v1/ARCEME-DC-DHP-EMDAT"
+
+keywords:
+  - earth observation
+  - data cube
+  - zarr
+  - Sentinel-2
+  - Sentinel-1
+  - DEM
+  - land cover
+  - extreme events
+  - climate adaptation
+  - ARCEME
+  - EM-DAT
+  - disasters
+
+providers:
+  - name: "CloudFerro S.A."
+    roles: [producer, host]
+    url: "https://cloudferro.com"
+  - name: "ARCEME Project"
+    roles: [licensor, processor]
+
+fallback_bbox: [-180.0, -90.0, 180.0, 90.0]
