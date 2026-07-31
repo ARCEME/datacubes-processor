@@ -1,0 +1,36 @@
+---
+    descriptors:
+      style: SEnSeIv2
+      N_embeddings: 32
+      final_size: 74
+    blocks:
+      - 
+        type: GLOBAL_STATS
+        percentiles:
+          - 0.01
+          - 0.1
+          - 0.5
+          - 0.9
+          - 0.99
+      -
+        type: FCL
+        layer_sizes:
+          - 128
+          - 128
+          - 128
+        skips: add
+      -
+        type: ATTENTION
+        num_transformerencoders: 2
+        intermediate_size: 256
+        num_heads: 4
+        dims_per_head: 32
+        skips: true
+        dropout: 0.2   
+      -
+        type: BAND_EMBEDDING
+        embedding_dims: 32 # number of output channels
+        head_layer_sizes:
+          - 128
+        skips_heads: false
+        normalize: true

@@ -3,6 +3,8 @@ import numpy as np
 from senseiv2.inference import CloudMask
 from senseiv2.constants import SENTINEL2_DESCRIPTORS
 import os
+import tempfile
+import yaml
 from pathlib import Path
 import time
 
@@ -17,7 +19,34 @@ DEVICE = 'cpu'  # or 'cuda' if available
 MODEL_DIR = Path(__file__).parent.parent.parent / 'SEnSeIv2_config'
 config_path = MODEL_DIR / 'config.yaml'
 weights_path = MODEL_DIR / 'weights.pt'
-model = CloudMask(str(config_path), str(weights_path), verbose=True, categorise=True, device=DEVICE)
+
+
+def _resolve_model_config(cfg_path, model_dir):
+    """Return a config path whose `SEnSeIv2` architecture file is resolvable.
+
+    senseiv2.models.load_model resolves a *relative* `SEnSeIv2` value against the
+    installed package directory (…/site-packages/hf_models/sensei-configs/…),
+    a file the pip package does not ship — so a plain relative value raises
+    FileNotFoundError. We ship the architecture YAML in this repo's
+    SEnSeIv2_config/ and rewrite `SEnSeIv2` to that absolute path (load_model
+    leaves absolute paths untouched). A resolved copy is written to a temp file
+    so the committed config.yaml is never modified.
+    """
+    with open(cfg_path) as f:
+        cfg = yaml.safe_load(f)
+    ref = cfg.get('SEnSeIv2')
+    if ref and not os.path.isabs(ref):
+        bundled = model_dir / Path(ref).name          # e.g. senseiv2-medium.yaml
+        if bundled.exists():
+            cfg['SEnSeIv2'] = str(bundled)
+    fd, tmp = tempfile.mkstemp(suffix='.yaml', prefix='senseiv2_config_')
+    with os.fdopen(fd, 'w') as f:
+        yaml.safe_dump(cfg, f)
+    return tmp
+
+
+model = CloudMask(_resolve_model_config(config_path, MODEL_DIR), str(weights_path),
+                  verbose=True, categorise=True, device=DEVICE)
 
 def process_datacube(zarr_input_path, zarr_output_path):
     """Process a single Zarr file and generate cloud mask."""
